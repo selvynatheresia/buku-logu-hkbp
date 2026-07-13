@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <work>
+    <work-title>Lagu Uji Pipeline (dummy)</work-title>
+  </work>
+  <identification>
+    <miscellaneous>
+      <miscellaneous-field name="comment">Dummy untuk uji pipeline Buku Logu HKBP. G mayor, 4/4, anacrusis 1 ketuk. Kasus uji: dotted rhythm (b.2), melisma slur+extend (b.3), rest (b.4), tie antar-birama (b.5-6), fermata (b.7), 3 bait lirik.</miscellaneous-field>
+    </miscellaneous>
+  </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Melodi</part-name>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <!-- Birama 0: anacrusis (implicit) - 1 ketuk -->
+    <measure number="0" implicit="yes">
+      <attributes>
+        <divisions>2</divisions>
+        <key>
+          <fifths>1</fifths>
+          <mode>major</mode>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
+      </attributes>
+      <sound tempo="96"/>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>Ma</text></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>Su</text></lyric>
+        <lyric number="3"><syllabic>begin</syllabic><text>Ha</text></lyric>
+      </note>
+    </measure>
+    <measure number="1">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ri</text></lyric>
+        <lyric number="2"><syllabic>middle</syllabic><text>ka</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>le</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ki</text></lyric>
+        <lyric number="2"><syllabic>middle</syllabic><text>ci</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>lu</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ta</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>ta</text></lyric>
+        <lyric number="3"><syllabic>end</syllabic><text>ya</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ber</text></lyric>
+        <lyric number="2"><syllabic>single</syllabic><text>di</text></lyric>
+        <lyric number="3"><syllabic>begin</syllabic><text>ha</text></lyric>
+      </note>
+    </measure>
+    <measure number="2">
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot/>
+        <lyric number="1"><syllabic>middle</syllabic><text>nya</text></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>ha</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>le</text></lyric>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>nyi</text></lyric>
+        <lyric number="2"><syllabic>middle</syllabic><text>ti</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>lu</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <lyric number="1"><syllabic>end</syllabic><text>lah</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>ku</text></lyric>
+        <lyric number="3"><syllabic>end</syllabic><text>ya</text></lyric>
+      </note>
+    </measure>
+    <measure number="3">
+      <!-- Melisma: dua not eighth untuk SATU suku kata (slur + extend) -->
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">begin</beam>
+        <notations>
+          <slur type="start" number="1"/>
+        </notations>
+        <lyric number="1"><syllabic>begin</syllabic><text>pu</text><extend/></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>kar</text><extend/></lyric>
+        <lyric number="3"><syllabic>begin</syllabic><text>mu</text><extend/></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <beam number="1">end</beam>
+        <notations>
+          <slur type="stop" number="1"/>
+        </notations>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>ji</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>na</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>li</text></lyric>
+      </note>
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>Tu</text></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>ka</text></lyric>
+        <lyric number="3"><syllabic>end</syllabic><text>a</text></lyric>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>han</text></lyric>
+        <lyric number="2"><syllabic>middle</syllabic><text>sih</text></lyric>
+        <lyric number="3"><syllabic>begin</syllabic><text>na</text></lyric>
+      </note>
+    </measure>
+    <measure number="4">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <lyric number="1"><syllabic>single</syllabic><text>yang</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>Mu</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>ma</text></lyric>
+      </note>
+      <note>
+        <rest/>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch><step>D</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>e</text></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>ba</text></lyric>
+        <lyric number="3"><syllabic>end</syllabic><text>Nya</text></lyric>
+      </note>
+    </measure>
+    <measure number="5">
+      <note>
+        <pitch><step>E</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>sa</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>gi</text></lyric>
+        <lyric number="3"><syllabic>begin</syllabic><text>sam</text></lyric>
+      </note>
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>ber</text></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>se</text></lyric>
+        <lyric number="3"><syllabic>end</syllabic><text>pai</text></lyric>
+      </note>
+      <!-- Tie antar-birama: suku kata jatuh di sini, ditahan sampai birama 6 -->
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>4</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start"/>
+        </notations>
+        <lyric number="1"><syllabic>middle</syllabic><text>syu</text></lyric>
+        <lyric number="2"><syllabic>middle</syllabic><text>mu</text></lyric>
+        <lyric number="3"><syllabic>begin</syllabic><text>s'la</text></lyric>
+      </note>
+    </measure>
+    <measure number="6">
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <tied type="stop"/>
+        </notations>
+      </note>
+      <note>
+        <pitch><step>B</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>end</syllabic><text>kur</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>a</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>ma</text></lyric>
+      </note>
+      <note>
+        <pitch><step>C</step><octave>5</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>begin</syllabic><text>s'la</text></lyric>
+        <lyric number="2"><syllabic>begin</syllabic><text>u</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>la</text></lyric>
+      </note>
+      <note>
+        <pitch><step>A</step><octave>4</octave></pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <lyric number="1"><syllabic>middle</syllabic><text>ma</text></lyric>
+        <lyric number="2"><syllabic>middle</syllabic><text>mat</text></lyric>
+        <lyric number="3"><syllabic>middle</syllabic><text>ma</text></lyric>
+      </note>
+    </measure>
+    <!-- Birama akhir: 3 ketuk (komplemen anacrusis 1 ketuk) + fermata -->
+    <measure number="7">
+      <note>
+        <pitch><step>G</step><octave>4</octave></pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <dot/>
+        <notations>
+          <fermata type="upright"/>
+        </notations>
+        <lyric number="1"><syllabic>end</syllabic><text>nya</text></lyric>
+        <lyric number="2"><syllabic>end</syllabic><text>Mu</text></lyric>
+        <lyric number="3"><syllabic>end</syllabic><text>nya</text></lyric>
+      </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+      </barline>
+    </measure>
+  </part>
+</score-partwise>

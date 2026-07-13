@@ -1,0 +1,23 @@
+{
+  "id": "logu-000",
+  "logu_no": 0,
+  "title": "Lagu Uji Pipeline (dummy)",
+  "lyrics": [
+    {
+      "ende_no": null,
+      "language": "id",
+      "title": "Lagu Uji Pipeline",
+      "underlay": "base",
+      "verses_count": 3
+    }
+  ],
+  "categories": [],
+  "themes": [],
+  "scripture_refs": [],
+  "base": {
+    "file": "base.musicxml",
+    "license": "CC0-1.0",
+    "source_note": "Dummy buatan sendiri untuk menguji pipeline — BUKAN lagu Buku Logu. Kasus uji yang disengaja: anacrusis, dotted rhythm, melisma ber-slur + extend, tie antar-birama, rest, fermata, 3 bait lirik dengan syllabic begin/middle/end/single. G mayor (Do = G)."
+  },
+  "arrangements": []
+}

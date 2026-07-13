@@ -1,0 +1,3 @@
+# Normalisasi line ending: LF di repo, apa pun OS kontributornya.
+* text=auto eol=lf
+*.png binary
