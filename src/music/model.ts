@@ -96,6 +96,17 @@ export function pitchToString(p: Pitch): string {
   return `${p.step}${acc}${p.octave}`;
 }
 
+const STEP_SEMITONES: Record<Step, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+
+/**
+ * Nomor MIDI sebagai TURUNAN spelled pitch (C4 = 60; B#3 = 60 juga — enharmonis).
+ * Untuk audio dan pengurutan tinggi nada. JANGAN dipakai sebagai identitas nada:
+ * spelling-lah identitasnya (Prinsip enharmonic).
+ */
+export function pitchToMidi(p: Pitch): number {
+  return (p.octave + 1) * 12 + STEP_SEMITONES[p.step] + p.alter;
+}
+
 // ---------------------------------------------------------------------------
 // Konteks musik
 // ---------------------------------------------------------------------------

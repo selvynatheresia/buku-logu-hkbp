@@ -15,5 +15,7 @@ declare module 'verovio/esm' {
     renderToSVG(page?: number): string;
     getPageCount(): number;
     getVersion(): string;
+    /** Ekspor MEI dari data yang dimuat — dipakai test oracle transpose. */
+    getMEI(options?: Record<string, unknown>): string;
   }
 }

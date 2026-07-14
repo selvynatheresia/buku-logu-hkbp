@@ -23,6 +23,7 @@ import {
   fracSub,
   fracToString,
   measureCapacity,
+  pitchToMidi,
   pitchToString,
 } from './model';
 import type {
@@ -731,15 +732,8 @@ function comparePitchDesc(a: Pitch | null, b: Pitch | null): number {
   // rest tidak pernah anggota chord bernada; null diletakkan terakhir
   if (a === null) return 1;
   if (b === null) return -1;
-  const chromA = pitchChroma(a);
-  const chromB = pitchChroma(b);
-  return chromB - chromA;
-}
-
-/** Tinggi absolut untuk PENGURUTAN saja (bukan identitas nada — spelling tetap dijaga). */
-function pitchChroma(p: Pitch): number {
-  const base: Record<Step, number> = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
-  return (p.octave + 1) * 12 + base[p.step] + p.alter;
+  // tinggi MIDI untuk PENGURUTAN saja — spelling tetap identitas nada
+  return pitchToMidi(b) - pitchToMidi(a);
 }
 
 function toEvent(n: RawNote, voiceId: string, measureIdx: number, eventIdx: number): ScoreEvent {
