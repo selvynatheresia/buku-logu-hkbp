@@ -40,7 +40,7 @@ _Terakhir diupdate: 12 Juli 2026 (sinkron dengan SPEC v7)_
 
 ## ❓ Pertanyaan Terbuka / Pending (dengan status)
 
-- [ ] **Tech stack** — verovio vs OSMD (kriteria: multi-verse lyrics + filter bait untuk Opsi C), framework, library audio. → SATU-SATUNYA gerbang tersisa sebelum coding; tunggu usulan Fable 5, konfirmasi dulu.
+- [x] **Tech stack** — SELESAI 13 Jul 2026, lihat "Tech Stack Final" di bawah.
 - [ ] **Konvensi minor keys** (`Do = X` vs `La = X`) → kuverifikasi ke cetakan fisik; GERBANG hanya untuk converter lagu minor.
 - [ ] **Foto BL-73** → BELUM terkirim (baru dideskripsikan verbal; foto yang ada: Logu 110 & Logu 81). Kirim ke sesi Claude Code saat lyric renderer not angka mulai dikerjakan.
 - [ ] **Konvensi lirik di SATB not angka** (penempatan di format 4 baris) → Fable 5 tanya saat sampai di sana; cetakan fisik jadi acuan.
@@ -63,11 +63,18 @@ Cakupan nada dasar: C, Db, Bb, Eb, A. Catatan: set condong ke sisi mol (maks. kr
 
 ---
 
-## 🧱 Tech Stack Final (isi setelah disetujui)
+## 🧱 Tech Stack Final ✅ (disetujui 13 Juli 2026)
 
-- Rendering balok: _TBD (verovio vs OSMD; wajib multi-verse lyrics + filter bait)_
-- Logika musik (parse/transpose/not-angka/lirik): _TBD (preferensi: JS client-side murni)_
-- Audio playback: _TBD (kandidat Tone.js; 4-track + mute/solo + tempo + abstraksi instrument)_
-- Framework frontend: _TBD_
+- Rendering balok: **Verovio** (WASM, lazy-load; dipilih atas OSMD karena kualitas
+  engraving + `xml:id` per elemen + transpose bawaan sebagai test oracle; filter bait
+  di KEDUA library tidak ada → solusi: XML transform sebelum render, disetujui). Wrapper
+  di `src/lib/verovio.ts`; input MusicXML, swap ke OSMD murah kalau kepepet.
+- Logika musik: **TypeScript custom + tonal.js** (interval math/enharmonic spelling);
+  parser MusicXML sendiri, client-side murni, tanpa music21.
+- Audio playback: **Tone.js** di belakang abstraksi "instrument" milik proyek.
+- Framework frontend: **Svelte 5 (runes) + Vite + TypeScript**; test **Vitest**
+  (+ jsdom untuk test parser). Catatan: TypeScript dipin ke 5.x (TS 7 belum
+  kompatibel svelte-check).
+- PWA: **vite-plugin-pwa mode injectManifest** — SW kode sendiri (`src/sw.ts`).
 - Hosting: **GitHub Pages** ✅
 - Device tes: **iPad Safari + Android Chrome** ✅
