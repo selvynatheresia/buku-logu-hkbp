@@ -48,7 +48,9 @@ export async function renderMusicXmlToSvg(
     scale,
     // Unit internal Verovio ~1/10 mm pada scale 100; konversi px → unit
     // memakai rumus resmi dari dokumentasi: px * 100 / scale.
-    pageWidth: Math.round((pageWidthPx * 100) / scale),
+    // Clamp ke rentang sah Verovio (100..100000) — nilai di luar itu ditolak
+    // dan Verovio diam-diam jatuh ke default.
+    pageWidth: Math.min(100000, Math.max(100, Math.round((pageWidthPx * 100) / scale))),
     // pageHeight maksimum + adjustPageHeight = semua sistem masuk 1 "halaman"
     // yang dipotong pas tinggi isinya → SVG tunggal menerus.
     pageHeight: 60000,

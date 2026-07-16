@@ -1,10 +1,14 @@
 <script lang="ts">
   import { loguId, fetchHymnMeta, fetchHymnText } from '../lib/hymns';
+  import { acquireWakeLock } from '../lib/wake-lock';
   import { renderMusicXmlToSvg } from '../lib/verovio';
   import { parseMusicXml } from '../music/parse';
   import { scoreToCipher } from '../music/cipher';
   import type { CipherResult } from '../music/cipher';
+  import { compilePlayback } from '../music/playback';
+  import type { PlaybackScore } from '../music/playback';
   import { cipherToSvg } from '../render/cipher-svg';
+  import PlaybackBar from '../components/PlaybackBar.svelte';
   import type { HymnMeta } from '../lib/types';
   import type { ParseWarning } from '../music/model';
 
@@ -20,8 +24,12 @@
   let parseWarnings = $state<ParseWarning[]>([]);
   let cipherResult = $state<CipherResult | null>(null);
   let cipherError = $state<string | null>(null);
+  let playback = $state<PlaybackScore | null>(null);
 
   let view = $state<'balok' | 'angka'>('balok');
+
+  // Layar tidak boleh mati selama halaman hymn terbuka (live di music stand)
+  $effect(() => acquireWakeLock());
 
   // Penjaga race: kalau user pindah lagu saat load masih jalan, hasil lama dibuang.
   let requestSeq = 0;
@@ -35,6 +43,7 @@
     parseWarnings = [];
     cipherResult = null;
     cipherError = null;
+    playback = null;
     view = 'balok';
 
     (async () => {
@@ -52,13 +61,23 @@
         try {
           const parsed = parseMusicXml(xml);
           parseWarnings = parsed.warnings;
-          cipherResult = scoreToCipher(parsed.score);
+          playback = compilePlayback(parsed.score);
+          // converter cipher bisa berhenti di gerbang (minor dsb.) tanpa
+          // mematikan playback/balok — makanya try terpisah
+          try {
+            cipherResult = scoreToCipher(parsed.score);
+          } catch (e) {
+            cipherError = e instanceof Error ? e.message : String(e);
+          }
         } catch (e) {
           cipherError = e instanceof Error ? e.message : String(e);
         }
 
-        // Lebar diukur sekali saat load; re-layout saat resize/rotasi = TODO
-        const pageWidthPx = wrapper?.clientWidth ?? 800;
+        // Lebar diukur sekali saat load; re-layout saat resize/rotasi = TODO.
+        // Guard: saat DOM belum selesai layout, clientWidth bisa 0/mini —
+        // jangan teruskan nilai sampah ke engine layout Verovio.
+        const measured = wrapper?.clientWidth ?? 0;
+        const pageWidthPx = measured >= 200 ? measured : 800;
         const rendered = await renderMusicXmlToSvg(xml, { pageWidthPx });
         if (seq !== requestSeq) return;
         staffSvg = rendered;
@@ -99,6 +118,13 @@
         · {meta.arrangements.length} aransemen
       {/if}
     </p>
+
+    {#if playback}
+      <!-- key: pindah lagu = playback baru = player lama di-dispose bersih -->
+      {#key playback}
+        <PlaybackBar {playback} />
+      {/key}
+    {/if}
 
     <div class="view-toggle" role="group" aria-label="Jenis notasi">
       <button class:active={view === 'balok'} onclick={() => (view = 'balok')}>Balok</button>
