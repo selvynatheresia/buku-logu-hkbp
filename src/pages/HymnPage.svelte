@@ -3,11 +3,11 @@
   import { acquireWakeLock } from '../lib/wake-lock';
   import { renderMusicXmlToSvg } from '../lib/verovio';
   import { parseMusicXml } from '../music/parse';
-  import { scoreToCipher } from '../music/cipher';
+  import { formatDoLabel, scoreToCipher } from '../music/cipher';
   import type { CipherResult } from '../music/cipher';
   import { compilePlayback } from '../music/playback';
   import type { PlaybackScore } from '../music/playback';
-  import { cipherToSvg } from '../render/cipher-svg';
+  import { canvasMeasurer, cipherToSvg } from '../render/cipher-svg';
   import PlaybackBar from '../components/PlaybackBar.svelte';
   import type { HymnMeta } from '../lib/types';
   import type { ParseWarning } from '../music/model';
@@ -88,10 +88,16 @@
     })();
   });
 
+  // Mode Ibadah (default Opsi C): semua bait — versesToShow tidak diisi.
+  // Mode Latihan (chip bait + filter) menyusul di Tahap C2.
   const cipherSvg = $derived(
     cipherResult === null
       ? null
-      : cipherToSvg(cipherResult.cipher, { maxWidthPx: 800, fontSizePx: 20 }),
+      : cipherToSvg(cipherResult.cipher, {
+          maxWidthPx: 800,
+          fontSizePx: 20,
+          measureText: canvasMeasurer,
+        }),
   );
 
   const allWarnings = $derived([
@@ -146,13 +152,10 @@
           <p class="error">Not angka belum bisa ditampilkan: {cipherError}</p>
         {:else if cipherResult && cipherSvg}
           <p class="cipher-header">
-            Do = {cipherResult.cipher.doLabel} · {cipherResult.cipher.timeLabel}
+            {formatDoLabel(cipherResult.cipher.doLabel)} · {cipherResult.cipher.timeLabel}
           </p>
           <!-- eslint-disable-next-line svelte/no-at-html-tags — SVG hasil renderer kita sendiri -->
           {@html cipherSvg}
-          <p class="cipher-note">
-            Tahap B: angka saja — lirik menunggu verifikasi layout (foto BL-73).
-          </p>
         {:else}
           <p class="muted">Mengonversi…</p>
         {/if}
@@ -228,12 +231,6 @@
   .cipher-header {
     margin: 0 0 0.5rem;
     font-weight: 700;
-  }
-
-  .cipher-note {
-    margin: 0.5rem 0 0;
-    font-size: 0.8rem;
-    color: var(--muted);
   }
 
   .warnings {

@@ -26,6 +26,7 @@ import {
   type CipherNoteCell,
   cipherVoiceToString,
   degreeInfo,
+  formatDoLabel,
   scoreToCipher,
 } from './cipher';
 
@@ -297,6 +298,19 @@ describe('warning terstruktur', () => {
     expect(warnings.map((w) => w.code)).toContain('LYRICS_ON_TIE_CONTINUATION');
     // strukturnya tetap benar: tie jadi dash
     expect(cipherVoiceToString(cipher.voices[0])).toBe('1 - - 2');
+  });
+});
+
+describe('formatDoLabel (konvensi cetakan: nama Indonesia, nada = Do)', () => {
+  it('nama not Indonesia dengan elisi vokal yang benar', () => {
+    expect(formatDoLabel('C')).toBe('C = Do');
+    expect(formatDoLabel('Bb')).toBe('Bes = Do');
+    expect(formatDoLabel('Eb')).toBe('Es = Do');
+    expect(formatDoLabel('Ab')).toBe('As = Do');
+    expect(formatDoLabel('Db')).toBe('Des = Do');
+    expect(formatDoLabel('Gb')).toBe('Ges = Do');
+    expect(formatDoLabel('F#')).toBe('Fis = Do');
+    expect(formatDoLabel('C#')).toBe('Cis = Do');
   });
 });
 

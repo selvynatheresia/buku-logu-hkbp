@@ -479,6 +479,27 @@ function underlineCount(duration: Fraction, beat: Fraction): number {
 }
 
 // ---------------------------------------------------------------------------
+// Label nada dasar
+// ---------------------------------------------------------------------------
+
+/**
+ * Label nada dasar konvensi cetakan Buku Logu (referensi BL-73): nama not
+ * Indonesia/Belanda + urutan "<nada> = Do" — "Bes = Do", bukan "Do = Bb".
+ * Aturan nama: kres → "-is" (Fis, Cis); mol → "-es" dengan elisi vokal
+ * (Es, As — tapi Bes, Des, Ges).
+ */
+export function formatDoLabel(tonic: string): string {
+  const letter = tonic[0];
+  const accidentals = tonic.slice(1);
+  let name = letter;
+  for (const acc of accidentals) {
+    if (acc === '#') name += 'is';
+    else name += name.endsWith('A') || name.endsWith('E') ? 's' : 'es';
+  }
+  return `${name} = Do`;
+}
+
+// ---------------------------------------------------------------------------
 // Serialisasi debug/test — BUKAN format render.
 // Notasi: derajat + aksidental (#/b) + titik oktaf (' atas, , bawah) +
 // underline (_ per garis) + fermata (@) + slur ( '(' mulai, ')' selesai ).
