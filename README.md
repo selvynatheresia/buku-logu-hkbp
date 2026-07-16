@@ -50,6 +50,11 @@ npm run preview  # serve hasil build — pakai ini untuk tes offline/PWA
 Target device tes: **iPad Safari dan Android Chrome** (keduanya wajib), termasuk
 airplane-mode test setelah load pertama.
 
+## Kredit
+
+Dibuat dan dirawat oleh **Selvyna Theresia Sibarani** — personal project yang
+dimaksudkan sebagai legacy jangka panjang untuk komunitas HKBP.
+
 ## Lisensi
 
 - **Kode: [MIT](LICENSE).**

@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Buku Logu HKBP digital — PWA viewer notasi balok + not angka + lirik, offline-first. Fase 0: walking skeleton (5 lagu).",
+  "author": "Selvyna Theresia Sibarani",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

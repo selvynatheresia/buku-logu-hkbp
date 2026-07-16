@@ -32,6 +32,13 @@
       </li>
     {/each}
   </ul>
+
+  <!-- Colophon: hanya di halaman daftar — halaman hymn dipakai live saat
+       ibadah, harus bebas dari apa pun yang bukan musik. -->
+  <footer class="colophon">
+    <p>Dibuat oleh <strong>Selvyna Theresia Sibarani</strong></p>
+    <p>Kode open-source (MIT) · Notasi &amp; lirik: hak milik pemegangnya masing-masing</p>
+  </footer>
 {/if}
 
 <style>
@@ -71,5 +78,26 @@
 
   .muted {
     color: var(--muted);
+  }
+
+  /* Colophon "berbisik": kecil, redup, dipisah hairline — hierarki visual
+     memastikan daftar lagu tetap satu-satunya fokus halaman. */
+  .colophon {
+    margin-top: 3rem;
+    padding: 1rem 0 0.5rem;
+    border-top: 1px solid rgb(0 0 0 / 10%);
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .colophon p {
+    margin: 0;
+  }
+
+  .colophon strong {
+    font-weight: 600;
+    color: inherit;
   }
 </style>
