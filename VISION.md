@@ -14,6 +14,13 @@ _Terakhir diupdate: 7 Juli 2026_
 
 - Dipakai musisi & jemaat HKBP **di seluruh dunia**, termasuk diaspora.
 - Standar kualitas yang **tidak memalukan** kalau dilirik musisi/lembaga lain (mis. Yamuger).
+- **Ambisi benchmark (17 Jul 2026):** kemungkinan aplikasi gereja pertama yang
+  mendigitalkan buku nyanyian lengkap dengan notasi balok + not angka berdampingan —
+  targetnya jadi acuan bagi gereja/lembaga lain, termasuk potensi kolaborasi YAMUGER
+  (Kidung Jemaat/PKJ/NKB punya edisi not angka & edisi harmoni — kebutuhan serupa).
+- **Identitas:** yang dilihat user = HKBP & Buku Logu, bukan pembuatnya. Kisah
+  personal di balik proyek hidup di dokumen (README/VISION) dan kelak halaman
+  "Tentang" opsional — tidak pernah dominan di pengalaman harian.
 - **Menghidupkan kembali keindahan hymn Buku Logu** — melawan tren mencampur pop/soul sembarangan.
 - **Legacy jangka panjang:** format terbuka, bebas vendor lock-in, bisa dilanjutkan orang lain.
 
@@ -65,10 +72,10 @@ Sebagai gantinya:
 - Visi jauh: **orchestra penuh** ala Tabernacle Choir (multi-tahun).
 
 ### D. Untuk ibadah & organisasi (Fase 2)
-- **Setlist via URL encoding** (`?setlist=110,245,17`) — dibagikan lewat WA, **tanpa backend**. Trade-off: tidak ada sinkronisasi antar-device/akun; untuk konteks gereja, share link sudah menutup mayoritas kebutuhan.
+- ⭐ **Setlist via URL encoding** (`?setlist=110,245,17`) — dibagikan lewat WA, **tanpa backend**. Trade-off: tidak ada sinkronisasi antar-device/akun; untuk konteks gereja, share link sudah menutup mayoritas kebutuhan. _(Prioritas dinaikkan 17 Jul 2026 — kebutuhan nyata dirigen/song leader.)_
 - **Pencarian**: nomor / judul / tema / kategori liturgis / ayat Alkitab — index client-side (mis. FlexSearch) dari metadata; syaratnya disiplin mengisi metadata sejak lagu ke-1 (field sudah ada di schema).
 - **Stage mode**: huruf besar, kontras tinggi, dark mode (mostly CSS).
-- **Export PDF** via print CSS dari SVG. Trade-off: pagination hymn panjang butuh kerja ekstra.
+- ⭐ **Export PDF** via print CSS dari SVG. Trade-off: pagination hymn panjang butuh kerja ekstra. _(Prioritas dinaikkan 17 Jul 2026 — untuk jemaat tanpa perangkat.)_
 - Bisa dipakai **offline** _(Fase 1 ✅)_
 
 ### E. Jangka jauh
@@ -76,6 +83,30 @@ Sebagai gantinya:
 - Port native via **Capacitor**.
 
 ---
+
+## Ide Kelas Benchmark (dicatat 17 Jul 2026 — arah, BUKAN komitmen)
+
+> Kumpulan ide dari diskusi "supaya berskala internasional". Semua di luar scope
+> sekarang; dicatat supaya keputusan arsitektur hari ini tidak menutup pintunya.
+
+### Latihan & playback
+- **Sampled pipe organ** (SoundFont/sample) — abstraksi instrument sudah menyiapkan slot-nya.
+- **Highlight not berjalan** saat playback di KEDUA notasi (xml:id Verovio + sourceId cipher sudah tersedia dari hari pertama).
+- Fermata dihormati playback (rubato ringan), breath mark, A–B loop, count-in, metronome, mode "suaraku ditonjolkan".
+
+### Untuk pemusik
+- **Tampilan part ter-transpose untuk instrumen Bb/Eb/F** (trumpet, saxophone, horn) — transpose engine interval-based tinggal diberi preset instrumen; fitur langka bahkan di app hymnal komersial.
+- **Web MIDI out** (bunyikan ke keyboard/organ digital) + **pedal Bluetooth page-turn** (AirTurn dkk.) untuk music stand.
+- **Export MusicXML per hymn** — interop penuh; juga jalur teknis kolaborasi YAMUGER.
+
+### Untuk jemaat & ibadah
+- **Mode proyektor**: tampilan lirik-saja resolusi besar dari data yang sama — menggantikan software proyeksi terpisah yang datanya selalu tidak sinkron.
+- **Navigasi silang BE ↔ BL dua arah** (field ende_no sudah ada).
+- **Print/PDF paritas cetak** (booklet A4) — lihat prioritas Fase 2.
+
+### Platform
+- **Arsitektur multi-hymnal**: folder-per-hymn + skema sudah hymnal-agnostic — jangka panjang app ini bisa jadi "engine buku nyanyian" untuk buku lain (KJ, PKJ, NKB) tanpa rombak inti.
+- **Braille music export (BMML)** — ambisi aksesibilitas jangka sangat jauh.
 
 ## Pagar Disiplin (jangan dilanggar)
 

@@ -54,6 +54,16 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
 - **Offline-first:** hard acceptance criteria; service worker precache **manifest-driven ber-versi** (bukan "cache semua").
 - **PWA** dulu (bukan native), arsitektur gampang di-port ke Capacitor nanti.
 - **Version control:** Git sejak awal + lisensi open-source untuk kode (kandidat MIT/Apache-2.0); konten notasi/lirik dipisah eksplisit dari lisensi kode.
+- **(17 Jul 2026) Bahasa:** konten lirik HANYA Batak (sesuai buku asli); TIDAK ada
+  infrastruktur multi-bahasa UI sekarang. Field `language` di skema hymn.json tetap
+  sebagai pintu masa depan, tidak dipakai aktif.
+- **(17 Jul 2026) Prioritas Fase 2 dinaikkan:** setlist via URL + export/print PDF —
+  kebutuhan nyata dirigen (share daftar lagu ke tim musik) & jemaat tanpa perangkat.
+  Tetap BUKAN Fase 1. Detail di VISION.md.
+- **(17 Jul 2026) Identitas aplikasi:** yang dilihat user berpusat ke HKBP & Buku
+  Logu ("ini buku nyanyian gerejaku"), BUKAN ke pembuat. Kisah personal Selvyna =
+  konteks di balik layar (README/VISION/halaman Tentang opsional nanti); kredit
+  tetap halus sesuai keputusan sebelumnya (footer, README, metadata).
 
 ---
 
