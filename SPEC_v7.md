@@ -1,5 +1,15 @@
 # Prompt untuk Claude Fable 5 — Digitalisasi Buku Logu HKBP (Fase 0: Walking Skeleton, 5 Lagu) — v7
 
+> ⚠️ **ERRATA (17 Jul 2026, dari Selvyna — DECISIONS.md yang menang):** pemahaman
+> domain dokumen ini keliru di satu hal fundamental. Faktanya ada DUA buku terpisah:
+> **Buku Logu = notasi balok TANPA lirik**; **Buku Ende = not angka DENGAN lirik**.
+> Proyek = digitalisasi Buku Logu + kemampuan tambahan not angka & lirik (mekanisme
+> BL-73). Konsekuensi: fitur #1 di `<fitur_fase_1>` berubah — **renderer balok
+> menampilkan NOL lirik**; lirik hanya di renderer not angka, dan Opsi C hanya
+> berlaku untuk not angka. Kalimat-kalimat di dokumen ini yang menyebut "balok
+> beserta lirik" atau "Buku Logu mencetak not angka dan lirik" tidak berlaku lagi.
+> Detail lengkap: entri 17 Jul 2026 di DECISIONS.md.
+
 > Copy-paste seluruh blok di bawah ini ke Fable 5. Idealnya dijalankan di **Claude Code** karena ini proyek coding berkelanjutan, bukan sekali jawab.
 >
 > **Changelog v6 → v7:** tambahan cara kerja (bukan perubahan keputusan): wajib membuat **`CLAUDE.md`** di root repo saat setup skeleton — ringkasan keputusan terkunci (±100 baris) + pointer ke SPEC/DECISIONS/VISION, dan berfungsi sebagai **memori kerja hidup**: setiap koreksi dari Selvyna selama coding dicatat sebagai aturan baru di situ supaya kesalahan tidak terulang antar-sesi.

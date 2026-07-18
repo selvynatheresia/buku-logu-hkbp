@@ -21,10 +21,10 @@ base.musicxml ──► parser (TS) ──► MODEL INTERNAL (JSON)
              (TS + tonal.js)    + lirik (custom SVG)      (Tone.js)
                    │
                    ▼
-      MusicXML transform (pitch+key)
+      MusicXML transform (strip lirik; pitch+key saat transpose)
                    │
                    ▼
-               Verovio ──► SVG notasi balok
+               Verovio ──► SVG notasi balok (tanpa lirik, seperti buku asli)
 ```
 
 Prinsip kunci: **model musik internal sebagai perantara** — Verovio (rendering balok)

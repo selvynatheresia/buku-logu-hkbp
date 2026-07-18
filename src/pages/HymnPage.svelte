@@ -3,6 +3,7 @@
   import { acquireWakeLock } from '../lib/wake-lock';
   import { renderMusicXmlToSvg } from '../lib/verovio';
   import { parseMusicXml } from '../music/parse';
+  import { stripLyrics } from '../music/musicxml-transform';
   import { formatDoLabel, scoreToCipher } from '../music/cipher';
   import type { CipherResult } from '../music/cipher';
   import { compilePlayback } from '../music/playback';
@@ -78,7 +79,9 @@
         // jangan teruskan nilai sampah ke engine layout Verovio.
         const measured = wrapper?.clientWidth ?? 0;
         const pageWidthPx = measured >= 200 ? measured : 800;
-        const rendered = await renderMusicXmlToSvg(xml, { pageWidthPx });
+        // Balok tanpa lirik — meniru Buku Logu asli (klarifikasi 17 Jul 2026);
+        // lirik hanya tampil di renderer not angka.
+        const rendered = await renderMusicXmlToSvg(stripLyrics(xml), { pageWidthPx });
         if (seq !== requestSeq) return;
         staffSvg = rendered;
       } catch (e) {

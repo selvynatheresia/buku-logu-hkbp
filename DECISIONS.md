@@ -2,12 +2,25 @@
 
 > Log keputusan HIDUP. Kalau file ini bentrok dengan SPEC.md, **file ini yang menang** (keputusan terbaru). Update tiap ada keputusan besar, lalu upload ulang ke Project Knowledge.
 
-_Terakhir diupdate: 12 Juli 2026 (sinkron dengan SPEC v7)_
+_Terakhir diupdate: 17 Juli 2026 (klarifikasi fundamental dua-buku; menggantikan
+sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
 
 ---
 
 ## ✅ Keputusan Terkunci (jangan diasumsikan ulang)
 
+- **(17 Jul 2026) KLARIFIKASI FUNDAMENTAL — dua buku, dua notasi.** Di HKBP ada dua
+  buku terpisah: **Buku Logu = notasi BALOK TANPA lirik**; **Buku Ende = NOT ANGKA
+  DENGAN lirik**. Proyek ini = digitalisasi BUKU LOGU, dengan kemampuan TAMBAHAN
+  not angka + lirik (mekanisme mengikuti contoh BL-73 — yang adalah re-typeset gaya
+  Serpong, BUKAN cetakan asli Buku Logu). Konsekuensi terkunci:
+  (a) renderer BALOK menampilkan **NOL lirik** — elemen `<lyric>` di-strip dari
+  MusicXML sebelum Verovio (`stripLyrics` di `src/music/musicxml-transform.ts`);
+  (b) lirik HANYA tampil di renderer not angka (semua bait, hyphenated-per-note);
+  (c) Opsi C (`versesToShow`, Mode Ibadah/Latihan) HANYA berlaku untuk not angka;
+  (d) PENYIMPANAN lirik di dalam base.musicxml TIDAK berubah — tetap single source
+  of truth untuk not angka & lyric underlay masa depan.
+  Ini menggantikan fitur #1 SPEC v7 ("render balok beserta lirik").
 - **`CLAUDE.md` di root repo (cara kerja, dibuat saat setup skeleton):** ringkasan operasional keputusan terkunci (±100 baris) + pointer ke SPEC/DECISIONS/VISION untuk detail. Berfungsi sebagai **memori kerja hidup**: setiap koreksi dari Selvyna selama coding dicatat sebagai aturan baru di situ agar kesalahan tidak terulang antar-sesi. Koreksi teknis harian → CLAUDE.md; perubahan keputusan besar → tetap DECISIONS.md.
 - **Scope Fase 0:** walking skeleton, TEPAT 5 lagu (dipertimbangkan potong ke 3, DIBATALKAN — tetap 5 supaya semua skenario stress-test tercover). Jangan overbuild untuk ratusan lagu.
 - **Alur kerja PARALEL:** proses OMR + pembersihan lagu di Audiveris/MuseScore jalan bersamaan dengan coding, BUKAN berurutan. Lagu asli disuplai satu per satu begitu selesai; Claude Code mulai bangun & tes pipeline dari yang tersedia (dummy dulu, lalu lagu asli inkremental) — TIDAK menunggu kelima lagu selesai.
@@ -16,8 +29,14 @@ _Terakhir diupdate: 12 Juli 2026 (sinkron dengan SPEC v7)_
 - **Tempo kerja:** TIDAK ada tekanan waktu. Prioritas = kedalaman, kerapian, dokumentasi, pengujian menyeluruh (standar aplikasi internasional) — BUKAN kecepatan, dan BUKAN izin melebarkan scope.
 - **Format data:** terbuka & bebas vendor lock-in — MusicXML (notasi + lirik + alignment) + JSON/plain-text (metadata), sebagai file di disk. No SaaS berbayar, no DB proprietary.
 - **Base layer:** notasi asli Buku Logu **+ lirik as-printed (semua bait)** = canonical, immutable, append-only.
-- **Lirik:** SEMUA bait hyphenated-per-note dengan nomor bait, sesuai cetakan fisik (referensi: BL-73). Wajib sempurna di kelima lagu pilot. **Penyimpanan: di dalam MusicXML** via `<lyric number="n">` + `syllabic` + `extend`, dientry di MuseScore. `lyrics[]` di hymn.json = INDEKS/pointer (`underlay: "base"`), bukan penyimpan teks. Ende lain / terjemahan masa depan = file underlay eksternal (pola sama dengan arrangement layer).
-- **Layout bait — Opsi C:** SATU renderer lirik dengan parameter `versesToShow`, dua preset mode: **Mode Ibadah (DEFAULT)** = semua bait tampil, nol interaksi selama lagu; **Mode Latihan** = bait aktif + chip selector + auto-advance saat playback. Mode HANYA mempengaruhi bait mana yang digambar (pagar anti scope-creep). Berlaku identik untuk renderer balok DAN not angka. Toggle dipilih sebelum lagu dimulai.
+- **Lirik:** SEMUA bait hyphenated-per-note dengan nomor bait, mekanisme mengikuti
+  referensi BL-73 — **tampil HANYA di renderer not angka; balok nol lirik**
+  (klarifikasi 17 Jul 2026). Wajib sempurna di kelima lagu pilot.
+  **Penyimpanan: di dalam MusicXML** via `<lyric number="n">` + `syllabic` + `extend`,
+  dientry di MuseScore. `lyrics[]` di hymn.json = INDEKS/pointer (`underlay: "base"`),
+  bukan penyimpan teks. Ende lain / terjemahan masa depan = file underlay eksternal
+  (pola sama dengan arrangement layer).
+- **Layout bait — Opsi C:** SATU renderer lirik dengan parameter `versesToShow`, dua preset mode: **Mode Ibadah (DEFAULT)** = semua bait tampil, nol interaksi selama lagu; **Mode Latihan** = bait aktif + chip selector + auto-advance saat playback. Mode HANYA mempengaruhi bait mana yang digambar (pagar anti scope-creep). **Berlaku HANYA untuk renderer not angka** — balok tanpa lirik sama sekali (klarifikasi 17 Jul 2026). Toggle dipilih sebelum lagu dimulai.
 - **Layered score model:** tiap hymn = 1 base layer + 0..n arrangement layers (MULTIPLE versi per hymn). Score Mode toggle: "Buku Logu Mode" vs "Full Score Mode" + version selector.
 - **Editing arrangement:** di MuseScore 4 di luar app → export MusicXML → taruh file sesuai konvensi. App Fase 1 TIDAK punya notation editor built-in. Validator import otomatis = Fase 2.
 - **Not angka:** **movable-do** (1 = do = nada dasar). Transpose: angka TIDAK berubah, hanya `Do = X` + balok yang berubah. Renderer custom (SVG/HTML) dari model internal — bukan verovio/OSMD.
