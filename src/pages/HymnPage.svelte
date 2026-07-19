@@ -20,6 +20,13 @@
   let error = $state<string | null>(null);
   let wrapper = $state<HTMLElement | null>(null);
 
+  // Toggle lirik balok (Batch C): default TANPA lirik (Buku Logu asli);
+  // saat diaktifkan, render ulang dari MusicXML utuh (semua bait, native
+  // Verovio) dan di-cache — untuk kebutuhan latihan "ulang dari lirik X".
+  let xmlSource = $state<string | null>(null);
+  let staffSvgLyrics = $state<string | null>(null);
+  let showBalokLyrics = $state(false);
+
   // Pipeline otak musik: MusicXML → parser → model internal → cipher.
   // Berjalan paralel dengan render Verovio (yang membaca MusicXML asli).
   let parseWarnings = $state<ParseWarning[]>([]);
@@ -61,6 +68,9 @@
     meta = null;
     staffSvg = null;
     error = null;
+    xmlSource = null;
+    staffSvgLyrics = null;
+    showBalokLyrics = false;
     parseWarnings = [];
     cipherResult = null;
     cipherError = null;
@@ -76,6 +86,7 @@
 
         const xml = await fetchHymnText(id, m.base.file);
         if (seq !== requestSeq) return;
+        xmlSource = xml;
 
         // otak musik (sinkron, cepat) — gagal parse ≠ gagal halaman:
         // balok Verovio tetap tampil, not angka menampilkan alasannya
@@ -108,6 +119,21 @@
         if (seq !== requestSeq) return;
         error = e instanceof Error ? e.message : String(e);
       }
+    })();
+  });
+
+  // Render balok BER-LIRIK secara malas saat toggle pertama kali menyala
+  $effect(() => {
+    if (!showBalokLyrics || staffSvgLyrics !== null || xmlSource === null) return;
+    const seq = requestSeq;
+    const src = xmlSource;
+    (async () => {
+      const measured = wrapper?.clientWidth ?? 0;
+      const rendered = await renderMusicXmlToSvg(src, {
+        pageWidthPx: measured >= 200 ? measured : 800,
+      });
+      if (seq !== requestSeq) return;
+      staffSvgLyrics = rendered;
     })();
   });
 
@@ -166,8 +192,19 @@
     </div>
 
     {#if view === 'balok'}
+      <label class="balok-lyric-toggle">
+        <input type="checkbox" bind:checked={showBalokLyrics} />
+        Tampilkan lirik (semua bait) — untuk latihan
+      </label>
       <div class="score" bind:this={wrapper}>
-        {#if staffSvg}
+        {#if showBalokLyrics}
+          {#if staffSvgLyrics}
+            <!-- eslint-disable-next-line svelte/no-at-html-tags — SVG dari Verovio atas file milik repo sendiri -->
+            {@html staffSvgLyrics}
+          {:else}
+            <p class="muted">Merender notasi berlirik…</p>
+          {/if}
+        {:else if staffSvg}
           <!-- eslint-disable-next-line svelte/no-at-html-tags — SVG dari Verovio atas file milik repo sendiri -->
           {@html staffSvg}
         {:else}
@@ -261,6 +298,23 @@
   .score :global(svg) {
     max-width: 100%;
     height: auto;
+  }
+
+  .balok-lyric-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    min-height: 44px; /* target sentuh */
+  }
+
+  .balok-lyric-toggle input {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--accent);
   }
 
   .cipher-header {
