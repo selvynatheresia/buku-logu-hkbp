@@ -106,6 +106,26 @@ describe('parse dummy logu-000', () => {
     expect(Object.keys(tieStop.lyrics)).toHaveLength(0);
   });
 
+  it('dinamika, wedge, words, dan artikulasi terbaca (Batch B)', () => {
+    expect(melody.measures[0].directions).toEqual([
+      { kind: 'dynamic', start: FRAC_ZERO, value: 'mf' },
+    ]);
+    expect(melody.measures[2].directions).toEqual([
+      { kind: 'wedge', start: FRAC_ZERO, wedge: 'crescendo' },
+    ]);
+    // satu <direction> berisi dua direction-type: wedge stop lalu f
+    expect(melody.measures[3].directions).toEqual([
+      { kind: 'wedge', start: FRAC_ZERO, wedge: 'stop' },
+      { kind: 'dynamic', start: FRAC_ZERO, value: 'f' },
+    ]);
+    expect(melody.measures[5].directions).toEqual([
+      { kind: 'words', start: FRAC_ZERO, text: 'dim.' },
+    ]);
+    // aksen di not ke-3 birama 1 (B4)
+    const accented = melody.measures[1].events[2] as NoteEvent;
+    expect(accented.articulations).toEqual(['accent']);
+  });
+
   it('rest di birama 4, fermata + final bar di birama akhir', () => {
     const rest = melody.measures[4].events[1];
     expect(rest.kind).toBe('rest');
@@ -283,6 +303,27 @@ describe('warning terstruktur', () => {
   it('birama tengah kurang durasi → MEASURE_DURATION', () => {
     const xml = makeScore([FULL_BAR, q('C', 4) + q('D', 4), FULL_BAR]);
     expect(warningCodes(xml)).toContain('MEASURE_DURATION');
+  });
+
+  it('dinamika tak dikenal → UNKNOWN_DYNAMIC', () => {
+    const xml = makeScore([
+      `<direction><direction-type><dynamics><wumbo/></dynamics></direction-type></direction>${FULL_BAR}`,
+    ]);
+    expect(warningCodes(xml)).toContain('UNKNOWN_DYNAMIC');
+  });
+
+  it('artikulasi tak didukung → UNKNOWN_ARTICULATION', () => {
+    const bar =
+      q('C', 4, '<notations><articulations><spiccato/></articulations></notations>') +
+      q('D', 4) + q('E', 4) + q('F', 4);
+    expect(warningCodes(makeScore([bar]))).toContain('UNKNOWN_ARTICULATION');
+  });
+
+  it('crescendo tanpa penutup → WEDGE_UNPAIRED', () => {
+    const xml = makeScore([
+      `<direction><direction-type><wedge type="crescendo"/></direction-type></direction>${FULL_BAR}`,
+    ]);
+    expect(warningCodes(xml)).toContain('WEDGE_UNPAIRED');
   });
 });
 

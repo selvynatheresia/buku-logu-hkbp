@@ -26,7 +26,11 @@ import {
   pitchToMidi,
   pitchToString,
 } from './model';
+import { DYNAMIC_VALUES } from './model';
 import type {
+  Articulation,
+  Direction,
+  DynamicValue,
   Fraction,
   KeySignature,
   Measure,
@@ -106,6 +110,7 @@ interface RawNote {
   slurStop: boolean;
   fermata: boolean;
   tuplet: boolean;
+  articulations: Articulation[];
   lyrics: Record<number, Syllable>;
 }
 
@@ -113,6 +118,8 @@ interface RawMeasure {
   number: string;
   implicitAttr: boolean;
   notes: RawNote[];
+  /** Level sistem — hanya dibaca dari part pertama (hindari duplikat SATB). */
+  directions: Direction[];
   repeat: RepeatInfo;
   finalBar: boolean;
 }
@@ -187,6 +194,7 @@ export function parseMusicXml(xml: string): ParseResult {
   validateMeasureDurations(voices, time, anacrusis, warn);
   validateTies(voices, warn);
   validateLyrics(voices, warn);
+  validateWedges(measures, warn);
 
   const versesCount = countVerses(voices, warn);
 
@@ -240,6 +248,7 @@ function walkPart(part: Element, partIdx: number, ctx: WalkContext): RawMeasure[
       number,
       implicitAttr: measureEl.getAttribute('implicit') === 'yes',
       notes: [],
+      directions: [],
       repeat: { forward: false, backward: false, endingNumbers: null, endingType: null },
       finalBar: false,
     };
@@ -296,6 +305,8 @@ function walkPart(part: Element, partIdx: number, ctx: WalkContext): RawMeasure[
           const sound = child(el, 'sound');
           const tempo = sound?.getAttribute('tempo');
           if (tempo && ctx.tempoBpm === null) ctx.tempoBpm = Number(tempo);
+          // dinamika/wedge/words = level sistem; part pertama saja (anti-duplikat)
+          if (partIdx === 0) readDirection(el, number, cursor, raw, ctx);
           break;
         }
         case 'sound': {
@@ -355,6 +366,46 @@ function readKeyAndTime(attrs: Element, measureNumber: string, ctx: WalkContext)
 
 const VALID_STEPS: readonly string[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const VALID_SYLLABIC: readonly string[] = ['single', 'begin', 'middle', 'end'];
+const VALID_ARTICULATIONS: readonly string[] = ['accent', 'strong-accent', 'staccato', 'tenuto'];
+
+/** Baca <direction>: dinamika, hairpin cresc/decresc, teks bebas (dim., rit.). */
+function readDirection(
+  el: Element,
+  measureNumber: string,
+  cursor: Fraction,
+  raw: RawMeasure,
+  ctx: WalkContext,
+): void {
+  for (const dt of children(el, 'direction-type')) {
+    const dyn = child(dt, 'dynamics');
+    if (dyn) {
+      // nama tanda = tag anak pertama (<mf/>) atau isi <other-dynamics>
+      const mark = dyn.children[0]?.tagName ?? dyn.textContent?.trim() ?? '';
+      if ((DYNAMIC_VALUES as readonly string[]).includes(mark)) {
+        raw.directions.push({ kind: 'dynamic', start: cursor, value: mark as DynamicValue });
+      } else {
+        ctx.warn({
+          code: 'UNKNOWN_DYNAMIC',
+          message: `Tanda dinamika "${mark}" tidak dikenal — tidak dirender; cek cetakan/entry.`,
+          measure: measureNumber,
+        });
+      }
+    }
+    const wedge = child(dt, 'wedge');
+    if (wedge) {
+      const type = wedge.getAttribute('type');
+      if (type === 'crescendo' || type === 'diminuendo' || type === 'stop') {
+        raw.directions.push({ kind: 'wedge', start: cursor, wedge: type });
+      }
+      // type="continue" (lintas sistem) aman diabaikan — pasangan start/stop yang menentukan
+    }
+    const words = child(dt, 'words');
+    const text = words?.textContent?.trim();
+    if (text) {
+      raw.directions.push({ kind: 'words', start: cursor, text });
+    }
+  }
+}
 
 function readNote(
   el: Element,
@@ -422,7 +473,22 @@ function readNote(
   let fermata = false;
   let tiedStart = false;
   let tiedStop = false;
+  const articulations: Articulation[] = [];
   for (const notations of children(el, 'notations')) {
+    const artEl = child(notations, 'articulations');
+    if (artEl) {
+      for (const art of Array.from(artEl.children)) {
+        if (VALID_ARTICULATIONS.includes(art.tagName)) {
+          articulations.push(art.tagName as Articulation);
+        } else {
+          ctx.warn({
+            code: 'UNKNOWN_ARTICULATION',
+            message: `Artikulasi "${art.tagName}" belum didukung tampilan — diabaikan.`,
+            measure: measureNumber,
+          });
+        }
+      }
+    }
     const slurs = children(notations, 'slur');
     if (slurs.length > 2) {
       ctx.warn({
@@ -516,6 +582,7 @@ function readNote(
       slurStop,
       fermata,
       tuplet,
+      articulations,
       lyrics,
     },
   };
@@ -639,6 +706,7 @@ function buildVoices(
         index: measureIdx,
         partial: false, // diisi detectAnacrusis/validateMeasureDurations
         events,
+        directions: rawMeasure.directions, // referensi sama untuk semua voice (level sistem)
         repeat: rawMeasure.repeat,
         finalBar: rawMeasure.finalBar,
       };
@@ -762,6 +830,7 @@ function toEvent(n: RawNote, voiceId: string, measureIdx: number, eventIdx: numb
     slurStop: n.slurStop,
     lyrics: n.lyrics,
     tuplet: n.tuplet,
+    articulations: n.articulations,
   };
   return note;
 }
@@ -922,6 +991,43 @@ function validateLyrics(voices: Voice[], warn: (w: ParseWarning) => void): void 
         }
       }
     }
+  }
+}
+
+/** Hairpin harus berpasangan: crescendo/diminuendo … stop. */
+function validateWedges(measures: RawMeasure[], warn: (w: ParseWarning) => void): void {
+  let open: string | null = null;
+  let openMeasure = '';
+  for (const m of measures) {
+    for (const d of m.directions) {
+      if (d.kind !== 'wedge') continue;
+      if (d.wedge === 'stop') {
+        if (open === null) {
+          warn({
+            code: 'WEDGE_UNPAIRED',
+            message: 'Wedge stop tanpa crescendo/diminuendo pembuka.',
+            measure: m.number,
+          });
+        }
+        open = null;
+      } else {
+        if (open !== null) {
+          warn({
+            code: 'WEDGE_UNPAIRED',
+            message: `Wedge ${d.wedge} dibuka saat ${open} belum ditutup (birama ${openMeasure}).`,
+            measure: m.number,
+          });
+        }
+        open = d.wedge;
+        openMeasure = m.number;
+      }
+    }
+  }
+  if (open !== null) {
+    warn({
+      code: 'WEDGE_UNPAIRED',
+      message: `Wedge ${open} (birama ${openMeasure}) tidak pernah ditutup.`,
+    });
   }
 }
 

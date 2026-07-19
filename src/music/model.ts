@@ -143,6 +143,28 @@ export interface Syllable {
 }
 
 // ---------------------------------------------------------------------------
+// Tanda dinamika & arah (Batch B, 18 Jul 2026)
+// ---------------------------------------------------------------------------
+
+/** Tanda dinamika MusicXML yang dikenal (subset yang lazim di hymn). */
+export const DYNAMIC_VALUES = [
+  'ppp', 'pp', 'p', 'mp', 'mf', 'f', 'ff', 'fff', 'fp', 'sf', 'sfz', 'fz', 'rf', 'rfz',
+] as const;
+export type DynamicValue = (typeof DYNAMIC_VALUES)[number];
+
+/**
+ * Event arah pada posisi waktu dalam birama — level SISTEM (berlaku semua
+ * suara), sesuai praktik hymn; disimpan sekali dan dirujuk semua voice.
+ */
+export type Direction =
+  | { kind: 'dynamic'; start: Fraction; value: DynamicValue }
+  | { kind: 'wedge'; start: Fraction; wedge: 'crescendo' | 'diminuendo' | 'stop' }
+  | { kind: 'words'; start: Fraction; text: string };
+
+/** Artikulasi per not yang didukung tampilan Fase 1. */
+export type Articulation = 'accent' | 'strong-accent' | 'staccato' | 'tenuto';
+
+// ---------------------------------------------------------------------------
 // Event
 // ---------------------------------------------------------------------------
 
@@ -169,6 +191,8 @@ export interface NoteEvent extends EventBase {
   /** Ada time-modification (tuplet) di sumber — durasi sudah eksak, tapi
    *  renderer not angka perlu tahu untuk notasinya. */
   tuplet: boolean;
+  /** Artikulasi (aksen dsb.) — tampilan; playback velocity menyusul. */
+  articulations: Articulation[];
 }
 
 export interface RestEvent extends EventBase {
@@ -201,6 +225,8 @@ export interface Measure {
   /** Birama tidak penuh yang "sah" (anacrusis / birama akhir komplemen). */
   partial: boolean;
   events: ScoreEvent[];
+  /** Dinamika/wedge/teks level sistem — referensi array yang SAMA di semua voice. */
+  directions: Direction[];
   repeat: RepeatInfo;
   finalBar: boolean;
 }
@@ -243,7 +269,10 @@ export type WarningCode =
   | 'VOICES_UNUSUAL'
   | 'VERSE_NUMBERS'
   | 'LYRIC_NO_NUMBER'
-  | 'NESTED_SLUR';
+  | 'NESTED_SLUR'
+  | 'UNKNOWN_DYNAMIC'
+  | 'UNKNOWN_ARTICULATION'
+  | 'WEDGE_UNPAIRED';
 
 export interface ParseWarning {
   code: WarningCode;

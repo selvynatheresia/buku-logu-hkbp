@@ -69,6 +69,13 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
   kecil di bawah judul ("Lagu: X, YYYY"); (d) **nomor birama di awal tiap sistem**
   kedua renderer (Verovio bawaan; renderer cipher menggambar sendiri, sistem pertama
   dilewati). Aset dari scripts/generate-icons.ps1 (helper Windows, output di-commit).
+- **(18 Jul 2026) Tanda dinamika (Batch B):** model internal punya `Direction`
+  (dynamic/wedge/words, level sistem — dibaca dari part pertama) + `articulations`
+  per not; parser memvalidasi (UNKNOWN_DYNAMIC/UNKNOWN_ARTICULATION/WEDGE_UNPAIRED);
+  balok dirender native Verovio (terverifikasi), not angka lewat band dinamika di
+  atas baris angka (hairpin digambar manual, wedge lintas sistem digambar terbuka).
+  Playback velocity BELUM (tampilan dulu — dicatat, menyusul). Acceptance criteria
+  verifikasi Logu 110 bertambah: tanda dinamika cocok dengan cetakan.
 - **(17 Jul 2026) Identitas aplikasi:** yang dilihat user berpusat ke HKBP & Buku
   Logu ("ini buku nyanyian gerejaku"), BUKAN ke pembuat. Kisah personal Selvyna =
   konteks di balik layar (README/VISION/halaman Tentang opsional nanti); kredit

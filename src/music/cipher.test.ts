@@ -95,6 +95,7 @@ function mkScore(
                 slurStop: spec.slurStop ?? false,
                 lyrics: spec.lyrics ?? {},
                 tuplet: false,
+                articulations: [],
               };
               return note;
             }
@@ -106,6 +107,7 @@ function mkScore(
             index: mi,
             partial: false,
             events,
+            directions: [],
             repeat: { forward: false, backward: false, endingNumbers: null, endingType: null },
             finalBar: mi === measures.length - 1,
           };

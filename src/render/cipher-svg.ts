@@ -21,6 +21,7 @@
 // yang tampil), baru gambar. Pengukuran teks injectable supaya test
 // deterministik (heuristik) sementara browser bisa memakai canvas presisi.
 
+import { fracCompare } from '../music/model';
 import type { CipherCell, CipherMeasure, CipherNoteCell, CipherScore } from '../music/cipher';
 
 export type TextMeasurer = (text: string, sizePx: number, italic: boolean) => number;
@@ -139,7 +140,10 @@ export function cipherToSvg(cipher: CipherScore, options: CipherSvgOptions = {})
   const padY = f * 0.7;
   const gutterW = verses.length > 0 ? measure('9.', lyricSize, false) + f * 0.55 : 0;
   const lyricLineH = lyricSize * 1.35;
-  const aboveZone = f * 2.0;
+  // band dinamika (mf, hairpin, dim.) di atas baris angka — ruangnya hanya
+  // dialokasikan kalau skor memang punya tanda arah
+  const hasDirections = voice.measures.some((m) => m.directions.length > 0);
+  const aboveZone = hasDirections ? f * 2.75 : f * 2.0;
   const belowZone = f * 1.3;
   const lineHeight = aboveZone + belowZone + verses.length * lyricLineH + f * 0.5;
 
@@ -207,6 +211,11 @@ export function cipherToSvg(cipher: CipherScore, options: CipherSvgOptions = {})
 
     const lineCells: CellWithX[] = [];
     const slurStarts: number[] = []; // pusat x sel slurStart (baris ini)
+    // band dinamika baris ini
+    const dynY = baseline - f * 2.05;
+    const wedgeYMid = dynY - f * 0.2;
+    const wedgeH = f * 0.28;
+    const wedges: { type: 'crescendo' | 'diminuendo' | 'stop'; x: number }[] = [];
 
     // Nomor birama di awal sistem (kecuali sistem pertama) — konvensi partitur
     // profesional untuk koordinasi latihan; kecil & diredam, ikut nomor file.
@@ -219,6 +228,7 @@ export function cipherToSvg(cipher: CipherScore, options: CipherSvgOptions = {})
     line(x, barTop, x, barBottom); // barline pembuka baris
 
     for (const m of measures) {
+      const measureCellStart = lineCells.length;
       x += barPad;
       m.beats.forEach((beat, beatIdx) => {
         if (beatIdx > 0) x += beatGap;
@@ -260,7 +270,52 @@ export function cipherToSvg(cipher: CipherScore, options: CipherSvgOptions = {})
       } else {
         line(x, barTop, x, barBottom);
       }
+
+      // tanda arah birama ini — x diambil dari sel pertama pada/atau setelah
+      // posisi waktunya (nearest-cell anchoring)
+      const measureCells = lineCells.slice(measureCellStart);
+      for (const dir of m.directions) {
+        const anchor =
+          measureCells.find((c) => fracCompare(c.cell.start, dir.start) >= 0) ??
+          measureCells[measureCells.length - 1];
+        if (anchor === undefined) continue;
+        if (dir.kind === 'dynamic') {
+          parts.push(
+            `<text class="dyn" x="${r2(anchor.x - f * 0.3)}" y="${r2(dynY)}" font-size="${r2(f * 0.62)}" font-style="italic" font-weight="bold">${esc(dir.value)}</text>`,
+          );
+        } else if (dir.kind === 'words') {
+          parts.push(
+            `<text class="dir-words" x="${r2(anchor.x - f * 0.3)}" y="${r2(dynY)}" font-size="${r2(f * 0.58)}" font-style="italic">${esc(dir.text)}</text>`,
+          );
+        } else {
+          wedges.push({ type: dir.wedge, x: anchor.x });
+        }
+      }
     }
+
+    // Hairpin cresc/decresc: pasangkan start→stop dalam baris; yang menyeberang
+    // sistem digambar terbuka sampai ujung baris (jujur tapi tidak menyesatkan).
+    const drawHairpin = (w: { type: string; x: number }, x2: number) => {
+      const d =
+        w.type === 'crescendo'
+          ? `M ${r2(x2)} ${r2(wedgeYMid - wedgeH)} L ${r2(w.x)} ${r2(wedgeYMid)} L ${r2(x2)} ${r2(wedgeYMid + wedgeH)}`
+          : `M ${r2(w.x)} ${r2(wedgeYMid - wedgeH)} L ${r2(x2)} ${r2(wedgeYMid)} L ${r2(w.x)} ${r2(wedgeYMid + wedgeH)}`;
+      parts.push(
+        `<path class="wedge" fill="none" stroke="currentColor" stroke-width="${r2(f * 0.05)}" d="${d}"/>`,
+      );
+    };
+    let openWedge: { type: 'crescendo' | 'diminuendo'; x: number } | null = null;
+    for (const w of wedges) {
+      if (w.type === 'stop') {
+        if (openWedge !== null) {
+          drawHairpin(openWedge, w.x);
+          openWedge = null;
+        }
+      } else {
+        openWedge = { type: w.type, x: w.x };
+      }
+    }
+    if (openWedge !== null) drawHairpin(openWedge, x - barPad);
 
     // ---- lirik baris ini ----
     for (const token of planLyricTokens(lineCells, verses, f * 0.7)) {
@@ -290,6 +345,22 @@ export function cipherToSvg(cipher: CipherScore, options: CipherSvgOptions = {})
           }
           for (let i = 0; i < -cell.octaveDots; i++) {
             dot(cx, baseline + f * 0.3 + i * f * 0.26);
+          }
+          // artikulasi di atas angka (di atas titik oktaf atas kalau ada)
+          if (cell.articulations.length > 0) {
+            const yArt =
+              overlineTop - f * 0.24 - Math.max(0, cell.octaveDots) * f * 0.26 - f * 0.12;
+            for (const art of cell.articulations) {
+              if (art === 'accent' || art === 'strong-accent') {
+                parts.push(
+                  `<path class="artic" fill="none" stroke="currentColor" stroke-width="${r2(f * 0.07)}" d="M ${r2(cx - f * 0.22)} ${r2(yArt - f * 0.13)} L ${r2(cx + f * 0.22)} ${r2(yArt)} L ${r2(cx - f * 0.22)} ${r2(yArt + f * 0.13)}"/>`,
+                );
+              } else if (art === 'staccato') {
+                dot(cx, yArt, f * 0.07);
+              } else {
+                line(cx - f * 0.2, yArt, cx + f * 0.2, yArt, f * 0.08);
+              }
+            }
           }
           if (cell.slurStart) slurStarts.push(cx);
           if (cell.slurStop) {

@@ -49,6 +49,7 @@ function tinyScore(key: KeySignature, pitches: Pitch[]): InternalScore {
             index: 0,
             partial: false,
             finalBar: true,
+            directions: [],
             repeat: { forward: false, backward: false, endingNumbers: null, endingType: null },
             events: pitches.map((pitch, i) => ({
               kind: 'note' as const,
@@ -63,6 +64,7 @@ function tinyScore(key: KeySignature, pitches: Pitch[]): InternalScore {
               slurStop: false,
               lyrics: {},
               tuplet: false,
+              articulations: [],
             })),
           },
         ],

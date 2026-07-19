@@ -21,6 +21,8 @@
 
 import { FRAC_ZERO, frac, fracAdd, fracCompare, fracEq, fracSub, fracToString, measureCapacity } from './model';
 import type {
+  Articulation,
+  Direction,
   Fraction,
   InternalScore,
   Measure,
@@ -84,6 +86,8 @@ export interface CipherNoteCell extends CipherCellBase {
   accidental: number | null;
   slurStart: boolean;
   slurStop: boolean;
+  /** Artikulasi (aksen dsb.) — renderer menggambar glyph-nya di atas angka. */
+  articulations: Articulation[];
   /** key = nomor bait. */
   lyrics: Record<number, Syllable>;
 }
@@ -111,6 +115,8 @@ export interface CipherMeasure {
   index: number;
   partial: boolean;
   beats: CipherBeat[];
+  /** Dinamika/wedge/teks level sistem — diteruskan apa adanya dari model. */
+  directions: Direction[];
   repeat: RepeatInfo;
   finalBar: boolean;
 }
@@ -323,6 +329,7 @@ function convertMeasure(measure: Measure, ctx: ConvertContext, voiceId: string):
     index: measure.index,
     partial: measure.partial,
     beats,
+    directions: measure.directions,
     repeat: measure.repeat,
     finalBar: measure.finalBar,
   };
@@ -387,6 +394,7 @@ function emitEventCells(
           accidental: info.deviation === 0 ? null : info.deviation,
           slurStart: note.slurStart,
           slurStop: note.slurStop,
+          articulations: note.articulations,
           lyrics: note.lyrics,
         });
       } else {

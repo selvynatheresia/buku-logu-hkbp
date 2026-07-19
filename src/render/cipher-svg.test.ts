@@ -95,6 +95,16 @@ describe('cipherToSvg dengan lirik', () => {
     expect(svg).not.toContain('>99.<');
   });
 
+  it('dinamika, hairpin, words, dan aksen digambar (Batch B)', () => {
+    const svg = cipherToSvg(cipher, { fontSizePx: 20 });
+    expect(svg).toContain('class="dyn"');
+    expect(svg).toContain('>mf<');
+    expect(svg).toContain('>f<');
+    expect(svg).toContain('class="wedge"'); // hairpin crescendo m2→m3
+    expect(svg).toContain('>dim.<');
+    expect(svg).toContain('class="artic"'); // aksen B4 birama 1
+  });
+
   it('nomor birama tampil di awal sistem kedua dst. (bukan sistem pertama)', () => {
     // dummy pada lebar 800 pecah jadi ≥2 sistem → minimal satu penanda mnum
     const svg = cipherToSvg(cipher, { fontSizePx: 20 });
