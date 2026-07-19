@@ -92,10 +92,10 @@
     font: inherit;
     flex: 1;
     min-height: 44px;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--accent-ink);
     border-radius: 0.4rem;
     background: var(--card);
-    color: var(--accent);
+    color: var(--accent-ink);
     cursor: pointer;
   }
 

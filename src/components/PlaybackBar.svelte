@@ -148,10 +148,10 @@
 
   button {
     font: inherit;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--accent-ink);
     border-radius: 0.4rem;
     background: var(--card);
-    color: var(--accent);
+    color: var(--accent-ink);
     padding: 0.4rem 0.8rem;
     cursor: pointer;
     min-height: 44px; /* target sentuh tablet */

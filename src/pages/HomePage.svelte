@@ -62,7 +62,7 @@
   .masthead h1 {
     font-size: 1.45rem;
     margin: 0;
-    color: var(--accent);
+    color: var(--accent-ink);
   }
 
   .tagline {
@@ -103,7 +103,7 @@
   .no {
     font-weight: 700;
     min-width: 2.5rem;
-    color: var(--accent);
+    color: var(--accent-ink);
   }
 
   .title {

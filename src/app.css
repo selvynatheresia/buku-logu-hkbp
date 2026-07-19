@@ -6,6 +6,7 @@
   --bg: #faf7f2;
   --ink: #1c1c1c;
   --accent: #031e66;
+  --accent-ink: #031e66; /* teks/border aksen — di tema terang sama dengan bidang */
   --on-accent: #ffffff;
   --accent-soft: #e9edf8;
   --muted: #6b6257;
@@ -18,12 +19,15 @@
   color-scheme: light;
 }
 
-/* Tema gelap: UI gelap, kertas notasi tetap terang (keterbacaan partitur). */
+/* Tema gelap: UI gelap, kertas notasi tetap terang (keterbacaan partitur).
+   Aksen KALEM (koreksi 19 Jul 2026): bidang lebar = navy redup; biru lembut
+   hanya untuk teks/border kecil — dua peran, dua token. */
 :root[data-theme='gelap'] {
   --bg: #14171e;
   --ink: #e8e6e1;
-  --accent: #9db4ec;
-  --on-accent: #0c1220;
+  --accent: #37456e;
+  --accent-ink: #9fb0d8;
+  --on-accent: #eef1f8;
   --accent-soft: #232a3a;
   --muted: #a29b90;
   --card: #1d222c;
@@ -40,6 +44,7 @@
   --bg: #ffffff;
   --ink: #000000;
   --accent: #001654;
+  --accent-ink: #001654;
   --on-accent: #ffffff;
   --accent-soft: #dfe5f5;
   --muted: #262626;
@@ -65,5 +70,5 @@ body {
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent-ink);
 }

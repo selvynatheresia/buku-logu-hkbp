@@ -329,7 +329,7 @@
   }
 
   .no {
-    color: var(--accent);
+    color: var(--accent-ink);
     margin-right: 0.5rem;
   }
 
@@ -355,7 +355,7 @@
 
   .view-toggle {
     display: inline-flex;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--accent-ink);
     border-radius: 0.5rem;
     overflow: hidden;
   }
@@ -363,7 +363,7 @@
   .view-toggle button {
     border: none;
     background: var(--card);
-    color: var(--accent);
+    color: var(--accent-ink);
     font: inherit;
     padding: 0.45rem 1.1rem;
     cursor: pointer;
@@ -387,7 +387,7 @@
   .transpose-ctl select {
     font: inherit;
     min-height: 44px;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--accent-ink);
     border-radius: 0.4rem;
     background: var(--card);
     color: var(--ink);
@@ -467,7 +467,7 @@
     font-size: 0.9rem;
     min-width: 44px;
     min-height: 44px;
-    border: 1px solid var(--accent);
+    border: 1px solid var(--accent-ink);
     border-radius: 50%;
     background: var(--paper);
     color: var(--accent);
