@@ -65,6 +65,29 @@ export function canonicalTonics(mode: 'major' | 'minor'): readonly string[] {
   return CANONICAL_TONICS[mode];
 }
 
+/** Fifths untuk tonic ter-spell — dipakai transform MusicXML menulis <key>. */
+export function fifthsForTonic(tonic: string, mode: 'major' | 'minor' = 'major'): number {
+  const fifths = FIFTHS_BY_TONIC[mode][tonic];
+  if (fifths === undefined) {
+    throw new TransposeError(`Tonic "${tonic}" tidak dikenal (mode ${mode}).`);
+  }
+  return fifths;
+}
+
+/**
+ * Transpose pitch untuk TAMPILAN: double accidental langsung di-respell
+ * sederhana — perilaku IDENTIK dengan transposeScoreToTonic (yang juga
+ * mengeluarkan warning); dipakai jalur transform MusicXML supaya kedua jalur
+ * (model & XML) selalu menghasilkan spelling yang sama.
+ */
+export function transposePitchDisplay(pitch: Pitch, interval: string): Pitch {
+  const out = transposePitch(pitch, interval);
+  if (Math.abs(out.alter) === 2) {
+    return parseNoteName(Note.simplify(pitchToString(out)));
+  }
+  return out;
+}
+
 /**
  * Spelling tonic dari key signature ("Do = X" not angka memakai ini juga).
  * mode null (file tidak menyatakan) diperlakukan mayor — konsisten dengan

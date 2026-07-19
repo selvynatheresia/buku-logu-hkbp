@@ -84,6 +84,13 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
 - **(18 Jul 2026) Toggle lirik balok (Batch C):** default TANPA lirik (Buku Logu
   asli); checkbox "Tampilkan lirik (semua bait)" untuk latihan — binary
   show/hide, tanpa granularitas per-bait; render dari MusicXML utuh via Verovio.
+- **(18 Jul 2026) UI Transpose:** select "Nada dasar" (Asli + 12 tonic kanonik,
+  label nama Indonesia) di halaman hymn, berlaku kedua view. Dua jalur satu engine:
+  model internal via transposeScoreToTonic (cipher label Do + playback + nada awal),
+  MusicXML via transposeMusicXml (balok Verovio, fidelitas MuseScore) — ekuivalensi
+  keduanya dikunci test. Elemen <accidental> display dibuang saat transpose
+  (Verovio menurunkan ulang dari key+alter; courtesy accidental cetakan tidak ikut
+  di versi transpose — konsekuensi sadar). Player dibangun ulang saat ganti nada.
 - **(17 Jul 2026) Identitas aplikasi:** yang dilihat user berpusat ke HKBP & Buku
   Logu ("ini buku nyanyian gerejaku"), BUKAN ke pembuat. Kisah personal Selvyna =
   konteks di balik layar (README/VISION/halaman Tentang opsional nanti); kredit
