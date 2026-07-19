@@ -1,13 +1,54 @@
 :root {
   /* Navy resmi HKBP — di-sample langsung dari assets/logo-hkbp.jpg (#031e66).
      Kontras teruji: putih di atasnya 15:1, di atas krem 14:1 (AAA).
-     Area notasi TIDAK memakai warna identitas — hitam di atas kertas. */
+     Area notasi TIDAK memakai warna identitas — selalu "kertas" terang
+     (--paper) di SEMUA tema, seperti app partitur profesional. */
   --bg: #faf7f2;
   --ink: #1c1c1c;
   --accent: #031e66;
+  --on-accent: #ffffff;
   --accent-soft: #e9edf8;
   --muted: #6b6257;
   --card: #ffffff;
+  --paper: #ffffff;
+  --paper-ink: #1c1c1c;
+  --hairline: rgb(0 0 0 / 10%);
+  --warn: #7a5a00;
+  --error: #a02020;
+  color-scheme: light;
+}
+
+/* Tema gelap: UI gelap, kertas notasi tetap terang (keterbacaan partitur). */
+:root[data-theme='gelap'] {
+  --bg: #14171e;
+  --ink: #e8e6e1;
+  --accent: #9db4ec;
+  --on-accent: #0c1220;
+  --accent-soft: #232a3a;
+  --muted: #a29b90;
+  --card: #1d222c;
+  --paper: #fbf9f4;
+  --paper-ink: #1c1c1c;
+  --hairline: rgb(255 255 255 / 16%);
+  --warn: #e2c078;
+  --error: #ff9c9c;
+  color-scheme: dark;
+}
+
+/* Kontras tinggi: hitam pekat di putih, aksen navy tergelap. */
+:root[data-theme='kontras'] {
+  --bg: #ffffff;
+  --ink: #000000;
+  --accent: #001654;
+  --on-accent: #ffffff;
+  --accent-soft: #dfe5f5;
+  --muted: #262626;
+  --card: #ffffff;
+  --paper: #ffffff;
+  --paper-ink: #000000;
+  --hairline: #000000;
+  --warn: #4a3800;
+  --error: #8a0000;
   color-scheme: light;
 }
 

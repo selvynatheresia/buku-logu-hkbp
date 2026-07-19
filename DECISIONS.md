@@ -76,6 +76,14 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
   atas baris angka (hairpin digambar manual, wedge lintas sistem digambar terbuka).
   Playback velocity BELUM (tampilan dulu — dicatat, menyusul). Acceptance criteria
   verifikasi Logu 110 bertambah: tanda dinamika cocok dengan cetakan.
+- **(18 Jul 2026) Aksesibilitas (Batch D):** panel "Aa" di header — ukuran teks
+  4 tingkat (UI via rem root, notasi via parameter renderer → RE-LAYOUT penuh,
+  bukan zoom) + tema Terang/Gelap/Kontras (design token CSS). Prinsip: **area
+  notasi selalu "kertas" terang di semua tema** (keterbacaan partitur menang,
+  pola app partitur profesional). Persisten per perangkat (localStorage).
+- **(18 Jul 2026) Toggle lirik balok (Batch C):** default TANPA lirik (Buku Logu
+  asli); checkbox "Tampilkan lirik (semua bait)" untuk latihan — binary
+  show/hide, tanpa granularitas per-bait; render dari MusicXML utuh via Verovio.
 - **(17 Jul 2026) Identitas aplikasi:** yang dilihat user berpusat ke HKBP & Buku
   Logu ("ini buku nyanyian gerejaku"), BUKAN ke pembuat. Kisah personal Selvyna =
   konteks di balik layar (README/VISION/halaman Tentang opsional nanti); kredit

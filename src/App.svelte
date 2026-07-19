@@ -2,11 +2,13 @@
   import { router } from './lib/router.svelte';
   import HomePage from './pages/HomePage.svelte';
   import HymnPage from './pages/HymnPage.svelte';
+  import SettingsPanel from './components/SettingsPanel.svelte';
 </script>
 
 <header class="app-header">
   <a class="brand" href="#/">Buku Logu HKBP</a>
   <span class="phase">Fase 0 · walking skeleton</span>
+  <SettingsPanel />
 </header>
 
 <main>
@@ -24,15 +26,15 @@
 <style>
   .app-header {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     background: var(--accent);
-    color: #fff;
+    color: var(--on-accent);
   }
 
   .brand {
-    color: #fff;
+    color: var(--on-accent);
     text-decoration: none;
     font-weight: 700;
     font-size: 1.1rem;

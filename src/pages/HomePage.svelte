@@ -111,7 +111,7 @@
   }
 
   .error {
-    color: #a02020;
+    color: var(--error);
   }
 
   .muted {
@@ -123,7 +123,7 @@
   .colophon {
     margin-top: 3rem;
     padding: 1rem 0 0.5rem;
-    border-top: 1px solid rgb(0 0 0 / 10%);
+    border-top: 1px solid var(--hairline);
     text-align: center;
     font-size: 0.8rem;
     color: var(--muted);

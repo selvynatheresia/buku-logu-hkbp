@@ -10,6 +10,7 @@
   import type { PlaybackScore } from '../music/playback';
   import { canvasMeasurer, cipherToSvg } from '../render/cipher-svg';
   import PlaybackBar from '../components/PlaybackBar.svelte';
+  import { settings } from '../lib/settings.svelte';
   import type { HymnMeta } from '../lib/types';
   import type { ParseWarning } from '../music/model';
 
@@ -64,6 +65,9 @@
 
   $effect(() => {
     const no = loguNo;
+    // skala notasi dari pengaturan aksesibilitas — dibaca di sini supaya
+    // perubahan ukuran memicu RE-RENDER penuh (re-layout, bukan zoom)
+    const staffScale = 40 * settings.scale;
     const seq = ++requestSeq;
     meta = null;
     staffSvg = null;
@@ -112,7 +116,10 @@
         const pageWidthPx = measured >= 200 ? measured : 800;
         // Balok tanpa lirik — meniru Buku Logu asli (klarifikasi 17 Jul 2026);
         // lirik hanya tampil di renderer not angka.
-        const rendered = await renderMusicXmlToSvg(stripLyrics(xml), { pageWidthPx });
+        const rendered = await renderMusicXmlToSvg(stripLyrics(xml), {
+          pageWidthPx,
+          scalePercent: staffScale,
+        });
         if (seq !== requestSeq) return;
         staffSvg = rendered;
       } catch (e) {
@@ -127,10 +134,12 @@
     if (!showBalokLyrics || staffSvgLyrics !== null || xmlSource === null) return;
     const seq = requestSeq;
     const src = xmlSource;
+    const staffScale = 40 * settings.scale;
     (async () => {
       const measured = wrapper?.clientWidth ?? 0;
       const rendered = await renderMusicXmlToSvg(src, {
         pageWidthPx: measured >= 200 ? measured : 800,
+        scalePercent: staffScale,
       });
       if (seq !== requestSeq) return;
       staffSvgLyrics = rendered;
@@ -144,7 +153,7 @@
       ? null
       : cipherToSvg(cipherResult.cipher, {
           maxWidthPx: 800,
-          fontSizePx: 20,
+          fontSizePx: 20 * settings.scale, // re-layout penuh saat ukuran berubah
           measureText: canvasMeasurer,
         }),
   );
@@ -284,11 +293,13 @@
 
   .view-toggle button.active {
     background: var(--accent);
-    color: #fff;
+    color: var(--on-accent);
   }
 
   .score {
-    background: var(--card);
+    /* selalu "kertas" terang di semua tema — keterbacaan partitur menang */
+    background: var(--paper);
+    color: var(--paper-ink);
     border-radius: 0.5rem;
     padding: 1rem;
     box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
@@ -325,7 +336,7 @@
   .warnings {
     margin-top: 0.75rem;
     font-size: 0.85rem;
-    color: #7a5a00;
+    color: var(--warn);
   }
 
   .warnings ul {
@@ -334,7 +345,7 @@
   }
 
   .error {
-    color: #a02020;
+    color: var(--error);
   }
 
   .muted {

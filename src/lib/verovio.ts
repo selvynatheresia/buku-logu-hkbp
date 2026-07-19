@@ -31,6 +31,9 @@ export async function getVerovio(): Promise<VerovioToolkit> {
 export interface RenderOptions {
   /** Lebar kontainer dalam px CSS; layout Verovio menyesuaikan lebar ini. */
   pageWidthPx?: number;
+  /** Skala engraving (persen); default 40 — pengaturan ukuran teks
+   *  aksesibilitas menaikkan ini → RE-LAYOUT penuh, bukan zoom. */
+  scalePercent?: number;
 }
 
 /**
@@ -39,10 +42,10 @@ export interface RenderOptions {
  */
 export async function renderMusicXmlToSvg(
   xml: string,
-  { pageWidthPx = 800 }: RenderOptions = {},
+  { pageWidthPx = 800, scalePercent = 40 }: RenderOptions = {},
 ): Promise<string> {
   const tk = await getVerovio();
-  const scale = 40; // persen dari ukuran engraving penuh
+  const scale = scalePercent;
 
   tk.setOptions({
     scale,

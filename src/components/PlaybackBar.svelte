@@ -151,7 +151,7 @@
 
   button.primary {
     background: var(--accent);
-    color: #fff;
+    color: var(--on-accent);
     min-width: 6.5rem;
   }
 
@@ -195,7 +195,7 @@
 
   .voice-chip button.on {
     background: var(--accent);
-    color: #fff;
+    color: var(--on-accent);
   }
 
   .flags {
