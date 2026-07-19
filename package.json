@@ -13,7 +13,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "icons": "node scripts/generate-icons.mjs"
+    "icons": "powershell -ExecutionPolicy Bypass -File scripts/generate-icons.ps1"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
