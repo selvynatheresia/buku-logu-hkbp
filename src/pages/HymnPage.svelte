@@ -57,6 +57,26 @@
 
   let view = $state<'balok' | 'angka'>(loadViewPref());
 
+  // Opsi C (C2): mode HANYA mempengaruhi bait yang digambar di not angka.
+  // Ibadah (default) = semua bait, nol interaksi; Latihan = bait aktif +
+  // chip selector + auto-advance tiap pengulangan playback.
+  let lyricMode = $state<'ibadah' | 'latihan'>('ibadah');
+  let activeVerse = $state(1);
+
+  function onSongEnd(): boolean {
+    // auto-advance bait Mode Latihan: lagu selesai → bait berikutnya, main lagi
+    if (
+      view === 'angka' &&
+      lyricMode === 'latihan' &&
+      cipherResult !== null &&
+      activeVerse < cipherResult.cipher.versesCount
+    ) {
+      activeVerse += 1;
+      return true; // minta player mengulang
+    }
+    return false;
+  }
+
   // Layar tidak boleh mati selama halaman hymn terbuka (live di music stand)
   $effect(() => acquireWakeLock());
 
@@ -80,6 +100,8 @@
     cipherError = null;
     playback = null;
     view = loadViewPref();
+    lyricMode = 'ibadah';
+    activeVerse = 1;
 
     (async () => {
       try {
@@ -155,6 +177,7 @@
           maxWidthPx: 800,
           fontSizePx: 20 * settings.scale, // re-layout penuh saat ukuran berubah
           measureText: canvasMeasurer,
+          versesToShow: lyricMode === 'latihan' ? [activeVerse] : undefined,
         }),
   );
 
@@ -191,7 +214,7 @@
     {#if playback}
       <!-- key: pindah lagu = playback baru = player lama di-dispose bersih -->
       {#key playback}
-        <PlaybackBar {playback} />
+        <PlaybackBar {playback} {onSongEnd} />
       {/key}
     {/if}
 
@@ -225,6 +248,31 @@
         {#if cipherError}
           <p class="error">Not angka belum bisa ditampilkan: {cipherError}</p>
         {:else if cipherResult && cipherSvg}
+          <div class="verse-controls">
+            <div class="mode-toggle" role="group" aria-label="Mode bait">
+              <button
+                class:active={lyricMode === 'ibadah'}
+                onclick={() => (lyricMode = 'ibadah')}
+              >
+                Ibadah
+              </button>
+              <button
+                class:active={lyricMode === 'latihan'}
+                onclick={() => (lyricMode = 'latihan')}
+              >
+                Latihan
+              </button>
+            </div>
+            {#if lyricMode === 'latihan'}
+              <div class="verse-chips" role="group" aria-label="Pilih bait">
+                {#each Array.from({ length: cipherResult.cipher.versesCount }, (_, i) => i + 1) as v (v)}
+                  <button class:active={activeVerse === v} onclick={() => (activeVerse = v)}>
+                    {v}
+                  </button>
+                {/each}
+              </div>
+            {/if}
+          </div>
           <p class="cipher-header">
             {formatDoLabel(cipherResult.cipher.doLabel)} · {cipherResult.cipher.timeLabel}
           </p>
@@ -326,6 +374,59 @@
     width: 1.1rem;
     height: 1.1rem;
     accent-color: var(--accent);
+  }
+
+  .verse-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+  }
+
+  .mode-toggle {
+    display: inline-flex;
+    border: 1px solid var(--muted);
+    border-radius: 0.4rem;
+    overflow: hidden;
+  }
+
+  .mode-toggle button {
+    font: inherit;
+    font-size: 0.85rem;
+    border: none;
+    background: var(--paper);
+    color: var(--muted);
+    padding: 0.3rem 0.8rem;
+    min-height: 44px;
+    cursor: pointer;
+  }
+
+  .mode-toggle button.active {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .verse-chips {
+    display: inline-flex;
+    gap: 0.35rem;
+  }
+
+  .verse-chips button {
+    font: inherit;
+    font-size: 0.9rem;
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  .verse-chips button.active {
+    background: var(--accent);
+    color: var(--on-accent);
   }
 
   .cipher-header {

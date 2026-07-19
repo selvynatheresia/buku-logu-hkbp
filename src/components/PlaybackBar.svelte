@@ -3,7 +3,15 @@
   import type { Player, PlayerState } from '../audio/player';
   import type { PlaybackScore } from '../music/playback';
 
-  let { playback }: { playback: PlaybackScore } = $props();
+  let {
+    playback,
+    onSongEnd,
+  }: {
+    playback: PlaybackScore;
+    /** Dipanggil saat lagu selesai; return true = mainkan ulang
+     *  (auto-advance bait Mode Latihan, Opsi C). */
+    onSongEnd?: () => boolean;
+  } = $props();
 
   // Player = objek imperatif (bukan $state); UI memegang cermin reaktifnya.
   let player: Player | null = null;
@@ -25,7 +33,12 @@
     busy = true;
     try {
       const p = await createPlayer(playback);
-      p.onEnded = () => (playState = 'stopped');
+      p.onEnded = () => {
+        playState = 'stopped';
+        if (onSongEnd?.() === true) {
+          void p.play().then(() => (playState = p.state));
+        }
+      };
       p.setTempo(tempo);
       // pulihkan mute/solo yang sempat diubah sebelum player ada
       for (const [id, m] of Object.entries(muted)) p.setMute(id, m);
