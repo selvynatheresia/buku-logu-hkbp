@@ -94,4 +94,11 @@ describe('cipherToSvg dengan lirik', () => {
     expect(svg).toContain('>1.<');
     expect(svg).not.toContain('>99.<');
   });
+
+  it('nomor birama tampil di awal sistem kedua dst. (bukan sistem pertama)', () => {
+    // dummy pada lebar 800 pecah jadi ≥2 sistem → minimal satu penanda mnum
+    const svg = cipherToSvg(cipher, { fontSizePx: 20 });
+    expect(svg).toContain('class="mnum"');
+    expect(svg.indexOf('class="mnum"')).toBe(svg.lastIndexOf('class="mnum"')); // tepat 1 (2 sistem)
+  });
 });

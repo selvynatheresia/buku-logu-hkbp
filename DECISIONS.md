@@ -60,6 +60,15 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
 - **(17 Jul 2026) Prioritas Fase 2 dinaikkan:** setlist via URL + export/print PDF —
   kebutuhan nyata dirigen (share daftar lagu ke tim musik) & jemaat tanpa perangkat.
   Tetap BUKAN Fase 1. Detail di VISION.md.
+- **(17 Jul 2026) Pass desain UI (Batch A):** (a) **Not Angka = view default & posisi
+  pertama** — nomor Buku Ende yang diumumkan gereja, cipher primer bagi jemaat;
+  pilihan view terakhir diingat per perangkat (localStorage); (b) **tema dari logo
+  resmi HKBP** — navy #031e66 di-sample dari logo (izin pemakaian dikonfirmasi);
+  logo HANYA di masthead daftar lagu + ikon PWA, TIDAK di halaman hymn; notasi tetap
+  hitam-di-kertas; (c) **composer/composer_year** di hymn.json (nullable), tampil
+  kecil di bawah judul ("Lagu: X, YYYY"); (d) **nomor birama di awal tiap sistem**
+  kedua renderer (Verovio bawaan; renderer cipher menggambar sendiri, sistem pertama
+  dilewati). Aset dari scripts/generate-icons.ps1 (helper Windows, output di-commit).
 - **(17 Jul 2026) Identitas aplikasi:** yang dilihat user berpusat ke HKBP & Buku
   Logu ("ini buku nyanyian gerejaku"), BUKAN ke pembuat. Kisah personal Selvyna =
   konteks di balik layar (README/VISION/halaman Tentang opsional nanti); kredit

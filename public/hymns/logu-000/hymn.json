@@ -2,6 +2,8 @@
   "id": "logu-000",
   "logu_no": 0,
   "title": "Lagu Uji Pipeline (dummy)",
+  "composer": "Penguji Pipeline",
+  "composer_year": 2026,
   "lyrics": [
     {
       "ende_no": null,

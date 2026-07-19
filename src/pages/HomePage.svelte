@@ -15,7 +15,17 @@
   });
 </script>
 
-<h1>Daftar Lagu</h1>
+<!-- Masthead identitas: satu-satunya tempat logo tampil di dalam app
+     (selain ikon PWA) — halaman hymn bebas identitas, murni musik. -->
+<header class="masthead">
+  <img src="logo-hkbp.png" alt="Logo HKBP" width="52" height="52" />
+  <div>
+    <h1>Buku Logu HKBP</h1>
+    <p class="tagline">Notasi balok · Not angka · Offline</p>
+  </div>
+</header>
+
+<h2 class="list-heading">Daftar Lagu</h2>
 
 {#if error}
   <p class="error">{error}</p>
@@ -42,6 +52,34 @@
 {/if}
 
 <style>
+  .masthead {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0.75rem 0 0.5rem;
+  }
+
+  .masthead h1 {
+    font-size: 1.45rem;
+    margin: 0;
+    color: var(--accent);
+  }
+
+  .tagline {
+    margin: 0.1rem 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .list-heading {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 1.5rem 0 0.6rem;
+  }
+
   .hymn-list {
     list-style: none;
     padding: 0;

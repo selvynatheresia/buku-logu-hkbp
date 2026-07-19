@@ -27,7 +27,27 @@
   let cipherError = $state<string | null>(null);
   let playback = $state<PlaybackScore | null>(null);
 
-  let view = $state<'balok' | 'angka'>('balok');
+  // Not Angka = default (nomor Buku Ende yang diumumkan gereja → cipher yang
+  // primer bagi jemaat); pilihan terakhir diingat per perangkat, jadi organis
+  // yang selalu membuka Balok cukup memilih sekali.
+  const VIEW_KEY = 'bl-view';
+  function loadViewPref(): 'balok' | 'angka' {
+    try {
+      return localStorage.getItem(VIEW_KEY) === 'balok' ? 'balok' : 'angka';
+    } catch {
+      return 'angka';
+    }
+  }
+  function setView(v: 'balok' | 'angka') {
+    view = v;
+    try {
+      localStorage.setItem(VIEW_KEY, v);
+    } catch {
+      // storage penuh/di-block — preferensi saja yang hilang, bukan fungsinya
+    }
+  }
+
+  let view = $state<'balok' | 'angka'>(loadViewPref());
 
   // Layar tidak boleh mati selama halaman hymn terbuka (live di music stand)
   $effect(() => acquireWakeLock());
@@ -45,7 +65,7 @@
     cipherResult = null;
     cipherError = null;
     playback = null;
-    view = 'balok';
+    view = loadViewPref();
 
     (async () => {
       try {
@@ -127,6 +147,11 @@
         · {meta.arrangements.length} aransemen
       {/if}
     </p>
+    {#if meta.composer}
+      <p class="credit-line">
+        Lagu: {meta.composer}{meta.composer_year ? `, ${meta.composer_year}` : ''}
+      </p>
+    {/if}
 
     {#if playback}
       <!-- key: pindah lagu = playback baru = player lama di-dispose bersih -->
@@ -136,8 +161,8 @@
     {/if}
 
     <div class="view-toggle" role="group" aria-label="Jenis notasi">
-      <button class:active={view === 'balok'} onclick={() => (view = 'balok')}>Balok</button>
-      <button class:active={view === 'angka'} onclick={() => (view = 'angka')}>Not Angka</button>
+      <button class:active={view === 'angka'} onclick={() => setView('angka')}>Not Angka</button>
+      <button class:active={view === 'balok'} onclick={() => setView('balok')}>Balok</button>
     </div>
 
     {#if view === 'balok'}
@@ -192,6 +217,13 @@
   .meta-line {
     color: var(--muted);
     margin-top: 0;
+    margin-bottom: 0.15rem;
+  }
+
+  .credit-line {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0 0 0.6rem;
   }
 
   .view-toggle {

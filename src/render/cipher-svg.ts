@@ -208,6 +208,14 @@ export function cipherToSvg(cipher: CipherScore, options: CipherSvgOptions = {})
     const lineCells: CellWithX[] = [];
     const slurStarts: number[] = []; // pusat x sel slurStart (baris ini)
 
+    // Nomor birama di awal sistem (kecuali sistem pertama) — konvensi partitur
+    // profesional untuk koordinasi latihan; kecil & diredam, ikut nomor file.
+    if (lineIdx > 0 && measures.length > 0) {
+      parts.push(
+        `<text class="mnum" x="${r2(x)}" y="${r2(baseline - f * 1.55)}" font-size="${r2(f * 0.55)}" fill-opacity="0.55">${esc(measures[0].number)}</text>`,
+      );
+    }
+
     line(x, barTop, x, barBottom); // barline pembuka baris
 
     for (const m of measures) {

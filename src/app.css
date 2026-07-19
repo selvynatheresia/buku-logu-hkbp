@@ -1,7 +1,11 @@
 :root {
+  /* Navy resmi HKBP — di-sample langsung dari assets/logo-hkbp.jpg (#031e66).
+     Kontras teruji: putih di atasnya 15:1, di atas krem 14:1 (AAA).
+     Area notasi TIDAK memakai warna identitas — hitam di atas kertas. */
   --bg: #faf7f2;
   --ink: #1c1c1c;
-  --accent: #1e3a5f;
+  --accent: #031e66;
+  --accent-soft: #e9edf8;
   --muted: #6b6257;
   --card: #ffffff;
   color-scheme: light;

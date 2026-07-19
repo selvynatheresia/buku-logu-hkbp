@@ -29,6 +29,10 @@ export interface HymnMeta {
   id: string;
   logu_no: number;
   title: string;
+  /** Pencipta lagu, sesuai cetakan ("Johann Anastasius Frelinghausen"); null = belum ada data. */
+  composer: string | null;
+  /** Tahun karya sesuai cetakan; null = tidak dicantumkan. */
+  composer_year: number | null;
   /** INDEKS lirik, bukan penyimpan teks — teks + alignment hidup di MusicXML. */
   lyrics: LyricsIndexEntry[];
   categories: string[];
