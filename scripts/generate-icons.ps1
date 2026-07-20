@@ -12,6 +12,7 @@
 
 Add-Type -AssemblyName System.Drawing
 $root = Split-Path $PSScriptRoot -Parent
+New-Item -ItemType Directory -Force "$root\public\icons" | Out-Null
 
 function New-Mark([int]$size, [string]$path, [bool]$transparent) {
   $bmp = New-Object System.Drawing.Bitmap($size, $size, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
