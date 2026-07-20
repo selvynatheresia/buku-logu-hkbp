@@ -15,10 +15,11 @@
   });
 </script>
 
-<!-- Masthead identitas: satu-satunya tempat logo tampil di dalam app
-     (selain ikon PWA) — halaman hymn bebas identitas, murni musik. -->
+<!-- Masthead identitas wordmark (20 Jul 2026): glyph netral, BUKAN lambang
+     resmi HKBP — sampai izin tertulis turun. Halaman hymn tetap bebas
+     identitas, murni musik. -->
 <header class="masthead">
-  <img src="logo-hkbp.png" alt="Logo HKBP" width="52" height="52" />
+  <img src="logo-mark.png" alt="" width="44" height="44" />
   <div>
     <h1>Buku Logu HKBP</h1>
     <p class="tagline">Notasi balok · Not angka · Offline</p>

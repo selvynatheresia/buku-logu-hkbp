@@ -91,6 +91,17 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
   keduanya dikunci test. Elemen <accidental> display dibuang saat transpose
   (Verovio menurunkan ulang dari key+alter; courtesy accidental cetakan tidak ikut
   di versi transpose — konsekuensi sadar). Player dibangun ulang saat ganti nada.
+- **(20 Jul 2026) Paket identitas:** (a) **LOGO → wordmark + glyph netral** (not
+  musik di ubin navy) — lambang resmi HKBP DILEPAS dari aplikasi & tree repo sampai
+  izin tertulis HKBP pusat turun (lambang masih ada di riwayat git; scrub riwayat
+  tersedia kalau diminta). Kembali ke lambang resmi kapan pun = ganti generator +
+  `npm run icons`. (b) **NAMA tetap "Buku Logu HKBP"** — bermakna personal bagi
+  Selvyna; keputusan final menunggu percakapan izin HKBP / platformisasi Fase 2
+  (kandidat rename tercatat: "Marende"). (c) **GitHub Organization ditahan**,
+  mengikuti keputusan nama.
+- **(20 Jul 2026) Disiplin versi konten:** setiap perubahan `public/hymns/**` WAJIB
+  bump `content_version` di manifest + `npm run fingerprint` — ditegakkan test
+  (gerbang CI); tanpa itu pengguna offline tidak pernah menerima konten baru.
 - **(17 Jul 2026) Identitas aplikasi:** yang dilihat user berpusat ke HKBP & Buku
   Logu ("ini buku nyanyian gerejaku"), BUKAN ke pembuat. Kisah personal Selvyna =
   konteks di balik layar (README/VISION/halaman Tentang opsional nanti); kredit
