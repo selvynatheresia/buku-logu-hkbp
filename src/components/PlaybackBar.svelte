@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createPlayer } from '../audio/player';
   import type { Player, PlayerState } from '../audio/player';
+  import { fracToNumber } from '../music/model';
   import type { PlaybackScore } from '../music/playback';
 
   let {
@@ -23,6 +24,32 @@
   let muted = $state<Record<string, boolean>>({});
   let soloed = $state<Record<string, boolean>>({});
 
+  // Seek bar (19 Jul 2026): posisi dalam KETUKAN (waktu musikal) supaya
+  // konsisten saat tempo diubah live; label detik dihitung dari tempo aktif.
+  let posBeats = $state(0);
+  // svelte-ignore state_referenced_locally — nilai awal memang yang diinginkan;
+  // pindah lagu/transpose me-remount komponen via {#key playback}
+  const totalBeats = fracToNumber(playback.total) * 4;
+
+  function fmtTime(beats: number): string {
+    const sec = Math.max(0, Math.round((beats * 60) / tempo));
+    return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+  }
+
+  // ticker posisi — hanya jalan saat playing (hemat baterai)
+  $effect(() => {
+    if (playState !== 'playing') return;
+    const id = setInterval(() => {
+      if (player) posBeats = Math.min(player.positionBeats, totalBeats);
+    }, 200);
+    return () => clearInterval(id);
+  });
+
+  function onSeek(e: Event) {
+    posBeats = Number((e.currentTarget as HTMLInputElement).value);
+    player?.seekBeats(posBeats);
+  }
+
   // Player dibuat malas di tap pertama: chunk Tone.js baru diunduh saat
   // audio benar-benar dipakai. Pembuatan (~ratusan ms) masih dalam jendela
   // transient activation, jadi Tone.start() di dalam play() tetap ter-unlock
@@ -35,11 +62,14 @@
       const p = await createPlayer(playback);
       p.onEnded = () => {
         playState = 'stopped';
+        posBeats = 0;
         if (onSongEnd?.() === true) {
           void p.play().then(() => (playState = p.state));
         }
       };
       p.setTempo(tempo);
+      // seek yang di-set sebelum player ada (drag saat idle) diterapkan sekarang
+      if (posBeats > 0) p.seekBeats(posBeats);
       // pulihkan mute/solo yang sempat diubah sebelum player ada
       for (const [id, m] of Object.entries(muted)) p.setMute(id, m);
       for (const [id, s] of Object.entries(soloed)) p.setSolo(id, s);
@@ -64,6 +94,7 @@
   function onStop() {
     player?.stop();
     playState = 'stopped';
+    posBeats = 0;
   }
 
   async function onStartingPitches() {
@@ -102,8 +133,32 @@
     </button>
     <label class="tempo">
       <span>Tempo {tempo}</span>
-      <input type="range" min="40" max="200" step="2" value={tempo} oninput={onTempoInput} />
+      <input
+        type="range"
+        autocomplete="off"
+        min="40"
+        max="200"
+        step="2"
+        value={tempo}
+        oninput={onTempoInput}
+      />
     </label>
+  </div>
+
+  <div class="seek-row">
+    <span class="time">{fmtTime(posBeats)}</span>
+    <input
+      class="seek"
+      type="range"
+      autocomplete="off"
+      min="0"
+      max={totalBeats}
+      step="0.05"
+      value={posBeats}
+      oninput={onSeek}
+      aria-label="Posisi lagu"
+    />
+    <span class="time">{fmtTime(totalBeats)}</span>
   </div>
 
   {#if playback.voices.length > 1}
@@ -179,6 +234,27 @@
 
   .tempo input {
     width: 8rem;
+  }
+
+  .seek-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.45rem;
+  }
+
+  .time {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    min-width: 2.4rem;
+    text-align: center;
+  }
+
+  .seek {
+    flex: 1;
+    accent-color: var(--accent);
+    min-height: 32px; /* jalur tipis, area sentuh tetap layak */
   }
 
   .voices {

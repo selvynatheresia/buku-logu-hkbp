@@ -246,6 +246,7 @@
         <label class="transpose-ctl">
           Nada dasar
           <select
+            autocomplete="off"
             value={targetTonic ?? ''}
             onchange={(e) => {
               const v = e.currentTarget.value;
@@ -263,7 +264,7 @@
 
     {#if view === 'balok'}
       <label class="balok-lyric-toggle">
-        <input type="checkbox" bind:checked={showBalokLyrics} />
+        <input type="checkbox" autocomplete="off" bind:checked={showBalokLyrics} />
         Tampilkan lirik (semua bait) — untuk latihan
       </label>
       <div class="score" bind:this={wrapper}>

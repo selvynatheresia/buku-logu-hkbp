@@ -59,6 +59,11 @@ Sebagai gantinya:
 
 ### A. Untuk penyanyi & koor (Fase 2)
 - **Practice suite:** loop bagian tertentu (A–B), metronome, count-in, volume slider per suara ("suaraku lebih keras"). Trade-off: UI mulai padat → butuh pemisahan mode "latihan" vs mode "ibadah".
+- **Solo/mute visual per suara** _(ide Selvyna 19 Jul 2026)_: highlight satu suara
+  S/A/T/B di NOTASI, suara lain diredupkan — pasangan visual dari mute/solo audio,
+  satu model mental. Urutan build: not angka dulu (tiap suara = baris sendiri, murah)
+  BEGITU Logu 73 SATB masuk — jangan dibangun buta tanpa data SATB nyata; balok
+  menyusul lewat pemetaan id not (kerja yang sama membuka playback-highlight — sinergi).
 
 ### B. Untuk pemusik pengiring (Fase 2 – jangka menengah)
 - Pilih **bunyi instrumen** (organ, piano, strings) — abstraksi "instrument" sudah disiapkan di arsitektur audio Fase 1.
@@ -74,7 +79,13 @@ Sebagai gantinya:
 ### D. Untuk ibadah & organisasi (Fase 2)
 - ⭐ **Setlist via URL encoding** (`?setlist=110,245,17`) — dibagikan lewat WA, **tanpa backend**. Trade-off: tidak ada sinkronisasi antar-device/akun; untuk konteks gereja, share link sudah menutup mayoritas kebutuhan. _(Prioritas dinaikkan 17 Jul 2026 — kebutuhan nyata dirigen/song leader.)_
 - **Pencarian**: nomor / judul / tema / kategori liturgis / ayat Alkitab — index client-side (mis. FlexSearch) dari metadata; syaratnya disiplin mengisi metadata sejak lagu ke-1 (field sudah ada di schema).
-- **Stage mode**: huruf besar, kontras tinggi, dark mode (mostly CSS).
+- **Stage mode**: huruf besar, kontras tinggi, dark mode (mostly CSS). _(Sebagian
+  sudah terwujud lewat panel aksesibilitas Aa — ukuran & tema, Jul 2026.)_
+- **Mode fokus / full-screen** _(ide Selvyna 19 Jul 2026)_: notasi memenuhi layar
+  tanpa header/kontrol (tombol "Fokus", tap untuk keluar; Fullscreen API) — rasa
+  membaca partitur fisik di music stand. BERBEDA dari mode proyektor (proyektor =
+  lirik besar untuk jemaat; fokus = notasi untuk pemusik) — keduanya saling
+  melengkapi. Kandidat item Fase 2 pertama setelah inti Fase 1 rampung.
 - ⭐ **Export PDF** via print CSS dari SVG. Trade-off: pagination hymn panjang butuh kerja ekstra. _(Prioritas dinaikkan 17 Jul 2026 — untuk jemaat tanpa perangkat.)_
 - Bisa dipakai **offline** _(Fase 1 ✅)_
 

@@ -29,6 +29,14 @@ export interface Player {
   setMute(voiceId: string, muted: boolean): void;
   /** Solo membisukan otomatis semua suara lain (semantik Tone.Channel). */
   setSolo(voiceId: string, soloed: boolean): void;
+  /** Posisi playback saat ini dalam KETUKAN (musical time — konsisten saat tempo berubah). */
+  readonly positionBeats: number;
+  /** Panjang lagu dalam ketukan. */
+  readonly totalBeats: number;
+  /** Lompat ke posisi ketukan (aman saat playing/paused/stopped). Catatan:
+   *  nada yang mestinya sudah berbunyi di titik itu baru terdengar di attack
+   *  not berikutnya — keterbatasan wajar playback synth. */
+  seekBeats(beats: number): void;
   /** Nada awal: pitch pertama tiap suara berurutan S→A→T→B (untuk dirigen). */
   playStartingPitches(): Promise<void>;
   /** Di-set UI; dipanggil saat lagu selesai (state sudah 'stopped'). */
@@ -90,6 +98,7 @@ export async function createPlayer(
 
   let state: PlayerState = 'stopped';
   let disposed = false;
+  const totalBeats = beatsOf(playback.total);
 
   const player: Player = {
     async play() {
@@ -130,6 +139,20 @@ export async function createPlayer(
     setSolo(voiceId, soloed) {
       const rig = rigs.find((r) => r.id === voiceId);
       if (rig) rig.channel.solo = soloed;
+    },
+
+    get positionBeats() {
+      return disposed ? 0 : transport.ticks / ppq;
+    },
+
+    get totalBeats() {
+      return totalBeats;
+    },
+
+    seekBeats(beats: number) {
+      if (disposed) return;
+      const clamped = Math.min(Math.max(0, beats), Math.max(0, totalBeats - 0.01));
+      transport.ticks = Math.round(clamped * ppq);
     },
 
     async playStartingPitches() {
