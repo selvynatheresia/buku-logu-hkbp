@@ -21,9 +21,9 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
   (d) PENYIMPANAN lirik di dalam base.musicxml TIDAK berubah — tetap single source
   of truth untuk not angka & lyric underlay masa depan.
   Ini menggantikan fitur #1 SPEC v7 ("render balok beserta lirik").
-- **`CLAUDE.md` di root repo (cara kerja, dibuat saat setup skeleton):** ringkasan operasional keputusan terkunci (±100 baris) + pointer ke SPEC/DECISIONS/VISION untuk detail. Berfungsi sebagai **memori kerja hidup**: setiap koreksi dari Selvyna selama coding dicatat sebagai aturan baru di situ agar kesalahan tidak terulang antar-sesi. Koreksi teknis harian → CLAUDE.md; perubahan keputusan besar → tetap DECISIONS.md.
+- **Catatan kerja (dibuat saat setup skeleton):** ringkasan operasional keputusan terkunci (±100 baris) + pointer ke SPEC/DECISIONS/VISION untuk detail. Berfungsi sebagai **memori kerja hidup**: setiap koreksi dari Selvyna selama coding dicatat sebagai aturan baru di situ agar kesalahan tidak terulang antar-sesi. Koreksi teknis harian → catatan kerja; perubahan keputusan besar → tetap DECISIONS.md. **Sejak 20 Jul 2026 catatan ini disimpan lokal (di-gitignore), tidak ikut repo publik.**
 - **Scope Fase 0:** walking skeleton, TEPAT 5 lagu (dipertimbangkan potong ke 3, DIBATALKAN — tetap 5 supaya semua skenario stress-test tercover). Jangan overbuild untuk ratusan lagu.
-- **Alur kerja PARALEL:** proses OMR + pembersihan lagu di Audiveris/MuseScore jalan bersamaan dengan coding, BUKAN berurutan. Lagu asli disuplai satu per satu begitu selesai; Claude Code mulai bangun & tes pipeline dari yang tersedia (dummy dulu, lalu lagu asli inkremental) — TIDAK menunggu kelima lagu selesai.
+- **Alur kerja PARALEL:** proses OMR + pembersihan lagu di Audiveris/MuseScore jalan bersamaan dengan coding, BUKAN berurutan. Lagu asli disuplai satu per satu begitu selesai; pembangunan & pengujian pipeline mulai dari yang tersedia (dummy dulu, lalu lagu asli inkremental) — TIDAK menunggu kelima lagu selesai.
 - **5 lagu pilot FINAL** (lihat tabel di bawah): Logu 110 (C), 730 (Db), 73 (Bb), 423 (Eb), 390 (A).
 - **Transpose — enharmonic spelling (acceptance criteria):** transpose berbasis interval (huruf not + aksidental), BUKAN sekadar geser semitone. Ejaan not & key signature hasil transpose harus mengikuti konvensi nada dasar tujuan (mis. Db naik semitone → D mayor 2 kres, bukan campuran C#/Db); hindari double accidentals kecuali memang diwajibkan konteks; untuk key tujuan ber-pasangan enharmonis (C#/Db, F#/Gb, B/Cb) pilih signature yang lebih sederhana.
 - **Tempo kerja:** TIDAK ada tekanan waktu. Prioritas = kedalaman, kerapian, dokumentasi, pengujian menyeluruh (standar aplikasi internasional) — BUKAN kecepatan, dan BUKAN izin melebarkan scope.
@@ -113,8 +113,8 @@ sebagian pemahaman domain SPEC v7 — lihat errata di SPEC_v7.md)_
 
 - [x] **Tech stack** — SELESAI 13 Jul 2026, lihat "Tech Stack Final" di bawah.
 - [ ] **Konvensi minor keys** (`Do = X` vs `La = X`) → kuverifikasi ke cetakan fisik; GERBANG hanya untuk converter lagu minor.
-- [ ] **Foto BL-73** → BELUM terkirim (baru dideskripsikan verbal; foto yang ada: Logu 110 & Logu 81). Kirim ke sesi Claude Code saat lyric renderer not angka mulai dikerjakan.
-- [ ] **Konvensi lirik di SATB not angka** (penempatan di format 4 baris) → Fable 5 tanya saat sampai di sana; cetakan fisik jadi acuan.
+- [ ] **Foto BL-73** → BELUM terkirim (baru dideskripsikan verbal; foto yang ada: Logu 110 & Logu 81). Kirim saat lyric renderer not angka mulai dikerjakan.
+- [ ] **Konvensi lirik di SATB not angka** (penempatan di format 4 baris) → dikonfirmasi saat sampai di sana; cetakan fisik jadi acuan.
 - [ ] **Status hak cipta HKBP** — 3 lapis; izin tertulis HKBP pusat sebelum disebar. → urusanku, non-teknis.
 - [ ] **Co-contributor** — cari 1–2 orang HKBP (musik/IT) untuk kelangsungan (risiko utama = kontinuitas manusia, bukan teknis).
 

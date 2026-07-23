@@ -7,8 +7,7 @@ transpose, playback SATB — **offline-first**, untuk dipakai live saat ibadah.
 **Status: Fase 0 — walking skeleton (5 lagu pilot).** Seluruh pipeline dibuktikan pada
 5 lagu dulu sebelum scale ke ratusan. Lihat [SPEC_v7.md](SPEC_v7.md) (spesifikasi),
 [DECISIONS.md](DECISIONS.md) (log keputusan — sumber kebenaran terbaru), dan
-[VISION.md](VISION.md) (arah jangka panjang). Ringkasan operasional untuk sesi
-AI-assisted coding: [CLAUDE.md](CLAUDE.md).
+[VISION.md](VISION.md) (arah jangka panjang).
 
 ## Arsitektur
 

@@ -1,4 +1,4 @@
-# Prompt untuk Claude Fable 5 — Digitalisasi Buku Logu HKBP (Fase 0: Walking Skeleton, 5 Lagu) — v7
+# Spesifikasi — Digitalisasi Buku Logu HKBP (Fase 0: Walking Skeleton, 5 Lagu) — v7
 
 > ⚠️ **ERRATA (17 Jul 2026, dari Selvyna — DECISIONS.md yang menang):** pemahaman
 > domain dokumen ini keliru di satu hal fundamental. Faktanya ada DUA buku terpisah:
@@ -10,9 +10,9 @@
 > beserta lirik" atau "Buku Logu mencetak not angka dan lirik" tidak berlaku lagi.
 > Detail lengkap: entri 17 Jul 2026 di DECISIONS.md.
 
-> Copy-paste seluruh blok di bawah ini ke Fable 5. Idealnya dijalankan di **Claude Code** karena ini proyek coding berkelanjutan, bukan sekali jawab.
+> Dokumen ini adalah briefing lengkap untuk sesi coding proyek — ditulis untuk dibaca utuh di awal, karena ini proyek berkelanjutan, bukan tugas sekali jalan.
 >
-> **Changelog v6 → v7:** tambahan cara kerja (bukan perubahan keputusan): wajib membuat **`CLAUDE.md`** di root repo saat setup skeleton — ringkasan keputusan terkunci (±100 baris) + pointer ke SPEC/DECISIONS/VISION, dan berfungsi sebagai **memori kerja hidup**: setiap koreksi dari Selvyna selama coding dicatat sebagai aturan baru di situ supaya kesalahan tidak terulang antar-sesi.
+> **Changelog v6 → v7:** tambahan cara kerja (bukan perubahan keputusan): wajib membuat **catatan kerja** saat setup skeleton — ringkasan keputusan terkunci (±100 baris) + pointer ke SPEC/DECISIONS/VISION, berfungsi sebagai **memori kerja hidup**: setiap koreksi dari Selvyna selama coding dicatat sebagai aturan baru di situ supaya kesalahan tidak terulang antar-sesi. (Sejak 20 Jul 2026 catatan ini disimpan lokal di luar repo — lihat DECISIONS.md.)
 >
 > **Changelog v5 → v6:** (a) **5 lagu pilot FINAL** dengan nada dasar: 110 (C), 730 (Db, 5 mol), 73 (Bb, SATB), 423 (Eb), 390 (A); (b) **alur kerja paralel**: OMR/pembersihan lagu jalan bersamaan dengan coding — lagu asli disuplai satu per satu, jangan menunggu kelimanya; (c) **enharmonic spelling** jadi acceptance criteria eksplisit untuk transpose; (d) pengujian transpose wajib menyertakan key tujuan ber-kres banyak (set pilot condong ke mol).
 >
@@ -208,10 +208,10 @@ Not angka yang dipakai koor gereja Indonesia adalah **movable-do (do-based)**: `
 <cara_kerja_yang_aku_inginkan>
 0. **Prinsip kerja: kedalaman > kecepatan.** Tidak ada deadline. Setiap komponen: rapi, terdokumentasi (README + komentar "kenapa"), teruji — supaya scale ke fase berikut tidak perlu rombak arsitektur. Bukan izin melebarkan scope.
 1. Mulai dengan **usulan tech stack + alasan + trade-off**. **TUNGGU konfirmasiku** sebelum coding. (Semua pertanyaan pra-coding lain sudah terjawab — lihat keputusan terkunci; jangan tanya ulang.)
-2. Setelah disetujui: project skeleton (repo structure sesuai `<struktur_data>`, **Git init**, lisensi open-source, PWA + service worker manifest-driven dasar), **TERMASUK membuat `CLAUDE.md` di root repo**. Isi `CLAUDE.md`:
+2. Setelah disetujui: project skeleton (repo structure sesuai `<struktur_data>`, **Git init**, lisensi open-source, PWA + service worker manifest-driven dasar), **TERMASUK membuat catatan kerja**. Isinya:
    - **Ringkasan keputusan terkunci, ±100 baris, singkat dan padat** — minimal mencakup: 5 prinsip yang tidak bisa ditawar; lirik semua bait hyphenated-per-note disimpan DI DALAM MusicXML (`<lyric number="n">` + syllabic + extend), `lyrics[]` di hymn.json = indeks; konvensi penamaan (zero-pad 3 digit `logu-NNN`, slug lowercase-hyphen untuk file aransemen); Opsi C layout bait (satu renderer, parameter `versesToShow`, default = Mode Ibadah, mode hanya mempengaruhi bait yang digambar); transpose berbasis interval dengan enharmonic spelling mengikuti key tujuan; movable-do (angka tidak berubah saat transpose); SATB not angka 4 baris; audio synth 4-track + mute/solo dengan abstraksi instrument; offline manifest-driven; device tes = iPad Safari DAN Android Chrome; alur suplai lagu paralel/inkremental; kedalaman > kecepatan.
-   - **Pointer eksplisit**: "Baca `SPEC.md` / `DECISIONS.md` / `VISION.md` untuk detail lengkap dan konteks keputusan" — CLAUDE.md adalah ringkasan operasional, ketiga file itu tetap sumber kebenaran untuk keputusan besar.
-   - **Aturan memori kerja (WAJIB dipatuhi sepanjang proyek):** setiap kali Selvyna mengoreksi kesalahanmu selama coding, catat koreksi itu sebagai **aturan baru di `CLAUDE.md`** (section khusus, mis. "## Aturan dari Koreksi") supaya kesalahan yang sama tidak terulang di sesi-sesi berikutnya. `CLAUDE.md` = memori kerja hidup yang terus diupdate; SPEC/DECISIONS/VISION = keputusan besar yang berubah lewat proses terpisah. Jangan mencampur keduanya: koreksi teknis harian masuk CLAUDE.md, perubahan keputusan besar tetap lewat DECISIONS.md.
+   - **Pointer eksplisit**: "Baca `SPEC.md` / `DECISIONS.md` / `VISION.md` untuk detail lengkap dan konteks keputusan" — catatan kerja adalah ringkasan operasional, ketiga file itu tetap sumber kebenaran untuk keputusan besar.
+   - **Aturan memori kerja (WAJIB dipatuhi sepanjang proyek):** setiap kali Selvyna mengoreksi kesalahan selama coding, catat koreksi itu sebagai **aturan baru di catatan kerja** (section khusus, mis. "## Log Koreksi") supaya kesalahan yang sama tidak terulang di sesi-sesi berikutnya. Catatan kerja = memori hidup yang terus diupdate; SPEC/DECISIONS/VISION = keputusan besar yang berubah lewat proses terpisah. Jangan mencampur keduanya: koreksi teknis harian masuk catatan kerja, perubahan keputusan besar tetap lewat DECISIONS.md.
 3. **Buat dummy MusicXML** (single melody + multi-verse lyrics + satu kasus melisma + anacrusis) — lagu asli menyusul satu per satu, inkremental; setiap lagu asli datang, jalankan ulang test suite pipeline terhadapnya.
 4. Implementasi transpose, uji beberapa interval — wajib mencakup key tujuan ber-mol banyak DAN ber-kres banyak, plus verifikasi enharmonic spelling (lihat acceptance criteria di `<fitur_fase_1>` poin 4).
 5. Converter Not Angka + lirik (single melody → verifikasi vs cetakan → SATB; layout lirik not angka menunggu foto BL-73). Termasuk kedua preset mode bait (Ibadah/Latihan).

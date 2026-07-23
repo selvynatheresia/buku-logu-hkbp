@@ -64,6 +64,17 @@ Sebagai gantinya:
   satu model mental. Urutan build: not angka dulu (tiap suara = baris sendiri, murah)
   BEGITU Logu 73 SATB masuk — jangan dibangun buta tanpa data SATB nyata; balok
   menyusul lewat pemetaan id not (kerja yang sama membuka playback-highlight — sinergi).
+- ⭐ **Mode Latihan Suara** _(ide Selvyna 20 Jul 2026, arah disepakati)_: paralel
+  dengan Mode Latihan bait — user memilih Sopran/Alto/Tenor/Bas, lalu mendapat
+  **panel latihan tersendiri**: notasi suara itu ditonjolkan, tombol main sendiri
+  (hanya suara itu), dan **tempo sendiri** yang tidak mengubah tempo ibadah.
+  Kenapa bukan sekadar solo+tempo global: target penggunanya penyanyi yang tidak
+  membaca not — mereka butuh "latihan bagianku", bukan konsep mixing. Tempo
+  latihan lambat WAJIB tidak bocor ke halaman utama (dua konteks, dua state).
+  Rekomendasi teknis: satu player per konteks (bukan satu player global), dan
+  pertimbangkan opsi "suaraku keras + lainnya pelan" sebagai langkah kedua —
+  banyak penyanyi butuh konteks harmoni, bukan isolasi total. Dibangun BERSAMAAN
+  dengan rendering SATB saat Logu 73 masuk.
 
 ### B. Untuk pemusik pengiring (Fase 2 – jangka menengah)
 - Pilih **bunyi instrumen** (organ, piano, strings) — abstraksi "instrument" sudah disiapkan di arsitektur audio Fase 1.
@@ -77,8 +88,23 @@ Sebagai gantinya:
 - Visi jauh: **orchestra penuh** ala Tabernacle Choir (multi-tahun).
 
 ### D. Untuk ibadah & organisasi (Fase 2)
+- ⭐ **Dua daftar isi: Buku Ende & Buku Logu** _(ide Selvyna 20 Jul 2026)_ — dua
+  pintu masuk untuk dua persona (jemaat lewat nomor BE; pemusik lewat nomor BL),
+  masing-masing mendarat di tab yang sesuai (BE → Not Angka, BL → Balok).
+  Prasyarat data: relasi many-to-many BE↔BL harus terisi (`lyrics[].ende_no`
+  sudah ada di skema — tinggal diisi disiplin sejak lagu pertama). Catatan UX:
+  satu logu dipakai banyak ende → daftar BE bisa memuat beberapa entri yang
+  membuka halaman logu yang sama; judul entri harus judul ENDE-nya, bukan judul
+  logu, supaya user tidak merasa "salah lagu".
 - ⭐ **Setlist via URL encoding** (`?setlist=110,245,17`) — dibagikan lewat WA, **tanpa backend**. Trade-off: tidak ada sinkronisasi antar-device/akun; untuk konteks gereja, share link sudah menutup mayoritas kebutuhan. _(Prioritas dinaikkan 17 Jul 2026 — kebutuhan nyata dirigen/song leader.)_
-- **Pencarian**: nomor / judul / tema / kategori liturgis / ayat Alkitab — index client-side (mis. FlexSearch) dari metadata; syaratnya disiplin mengisi metadata sejak lagu ke-1 (field sudah ada di schema).
+- ⭐ **Pencarian** _(dibahas 20 Jul 2026)_: **satu kotak search untuk semua**, bukan
+  dipisah per buku — user tidak selalu ingat sedang mencari BE atau BL; hasil
+  dikelompokkan berlabel ("Buku Ende 204" / "Buku Logu 73"). Query menerima
+  **nomor DAN judul sekaligus** (deteksi otomatis: input angka → cocokkan nomor
+  dulu, lalu judul; teks → judul/baris pertama lirik). Toleran typo & tanpa
+  diakritik. Jangka menengah: tema / kategori liturgis / ayat Alkitab — index
+  client-side (mis. FlexSearch) dari metadata; syaratnya disiplin mengisi
+  metadata sejak lagu ke-1 (field sudah ada di schema).
 - **Stage mode**: huruf besar, kontras tinggi, dark mode (mostly CSS). _(Sebagian
   sudah terwujud lewat panel aksesibilitas Aa — ukuran & tema, Jul 2026.)_
 - **Mode fokus / full-screen** _(ide Selvyna 19 Jul 2026)_: notasi memenuhi layar
