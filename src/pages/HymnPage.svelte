@@ -160,12 +160,17 @@
         }),
   );
 
-  const tonicOptions = $derived(
-    parsedScore === null ? [] : canonicalTonics(parsedScore.key.mode ?? 'major'),
-  );
-  const originalDoLabel = $derived(
-    parsedScore === null ? '' : formatDoLabel(tonicForKey(parsedScore.key)),
-  );
+  // Nada dasar asli = pilihan awal dropdown (bukan opsi "Asli" terpisah —
+  // menghindari dua entri berlabel sama; memilih tonic asli = tanpa transpose,
+  // sudah ditangani engine sebagai identitas).
+  const originalTonic = $derived(parsedScore === null ? null : tonicForKey(parsedScore.key));
+  const tonicOptions = $derived.by(() => {
+    if (parsedScore === null || originalTonic === null) return [];
+    const list = [...canonicalTonics(parsedScore.key.mode ?? 'major')];
+    // spelling asli bisa di luar tabel kanonik (mis. Gb/Cb) — tetap ditawarkan
+    if (!list.includes(originalTonic)) list.unshift(originalTonic);
+    return list;
+  });
 
   const allWarnings = $derived([
     ...parseWarnings.map((w) => `[parser ${w.code}] ${w.message}`),
@@ -247,13 +252,9 @@
           Nada dasar
           <select
             autocomplete="off"
-            value={targetTonic ?? ''}
-            onchange={(e) => {
-              const v = e.currentTarget.value;
-              targetTonic = v === '' ? null : v;
-            }}
+            value={targetTonic ?? originalTonic}
+            onchange={(e) => (targetTonic = e.currentTarget.value)}
           >
-            <option value="">Asli — {originalDoLabel}</option>
             {#each tonicOptions as t (t)}
               <option value={t}>{formatDoLabel(t)}</option>
             {/each}
@@ -265,7 +266,7 @@
     {#if view === 'balok'}
       <label class="balok-lyric-toggle">
         <input type="checkbox" autocomplete="off" bind:checked={showBalokLyrics} />
-        Tampilkan lirik (semua bait) — untuk latihan
+        Tampilkan lirik
       </label>
       <div class="score" bind:this={wrapper}>
         {#if staffSvg}
@@ -281,7 +282,8 @@
           <p class="error">Not angka belum bisa ditampilkan: {cipherError}</p>
         {:else if cipherResult && cipherSvg}
           <div class="verse-controls">
-            <div class="mode-toggle" role="group" aria-label="Mode bait">
+            <span class="verse-label" id="lbl-bait">Bait:</span>
+            <div class="mode-toggle" role="group" aria-labelledby="lbl-bait">
               <button class:active={lyricMode === 'ibadah'} onclick={() => (lyricMode = 'ibadah')}>
                 Ibadah
               </button>
@@ -433,6 +435,11 @@
     gap: 0.6rem;
     flex-wrap: wrap;
     margin-bottom: 0.6rem;
+  }
+
+  .verse-label {
+    font-size: 0.85rem;
+    color: var(--muted);
   }
 
   .mode-toggle {

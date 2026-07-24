@@ -176,10 +176,10 @@
   {#if playback.hasRepeats || playback.hasFermata}
     <p class="flags">
       {#if playback.hasRepeats}
-        ⚠ Tanda ulang belum dimainkan playback (Fase 1: linear sekali jalan).
+        Tanda ulang belum ikut diputar.
       {/if}
       {#if playback.hasFermata}
-        ℹ Fermata: durasi ekstra diabaikan playback Fase 1.
+        Tanda fermata tidak ditahan saat lagu diputar.
       {/if}
     </p>
   {/if}
